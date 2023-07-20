@@ -1,14 +1,13 @@
-package com.gafarov.bastion.config;
+package com.gafarov.bastion.security;
 
-import com.gafarov.bastion.controller.AuthenticationRequest;
-import com.gafarov.bastion.controller.AuthenticationResponse;
-import com.gafarov.bastion.controller.RegisterRequest;
-import com.gafarov.bastion.exception.ConflictDataException;
+import com.gafarov.bastion.controller.auth.AuthenticationRequest;
+import com.gafarov.bastion.controller.auth.AuthenticationResponse;
+import com.gafarov.bastion.controller.auth.RegisterRequest;
 import com.gafarov.bastion.entity.Role;
 import com.gafarov.bastion.entity.User;
 import com.gafarov.bastion.repository.UserRepository;
+import com.gafarov.bastion.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+    private final UserService userService;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -30,14 +30,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.password()))
                 .role(Role.USER)
                 .build();
-        try {
-            repository.save(user);
-        } catch (DataIntegrityViolationException exception) {
-            throw new ConflictDataException(
-                    String.format("Email %s is already in use", request.email()),
-                    exception
-            );
-        }
+        userService.addNewUser(user);
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
     }
@@ -49,8 +42,7 @@ public class AuthenticationService {
                         request.password()
                 )
         );
-        var user = repository.findByEmail(request.email())
-                .orElseThrow();
+        User user = userService.findUserByEmail(request.email());
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
     }
