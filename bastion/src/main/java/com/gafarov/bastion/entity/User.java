@@ -1,6 +1,8 @@
 package com.gafarov.bastion.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +25,14 @@ public class User implements UserDetails {
     @GeneratedValue
     private Integer id;
     @Column(unique = true)
+    @Email
+    @NotNull
     private String email;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
+    @NotNull
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
