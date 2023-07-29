@@ -22,7 +22,9 @@ public class BaseController {
     void handleConstraintViolation(HttpServletResponse response, ConstraintViolationException exception) throws IOException {
         var message = String.join(" ", exception.getConstraintViolations()
                 .stream()
-                .map(constraintViolation -> constraintViolation.getMessage())
+                .map(constraintViolation -> String.format("%s %s;",
+                        constraintViolation.getPropertyPath().toString(),
+                        constraintViolation.getMessage()))
                 .collect(Collectors.toList())
         );
         sendResponse(response, HttpServletResponse.SC_BAD_REQUEST, message);

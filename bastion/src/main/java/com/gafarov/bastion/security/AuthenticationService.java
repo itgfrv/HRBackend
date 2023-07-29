@@ -5,7 +5,6 @@ import com.gafarov.bastion.controller.auth.AuthenticationResponse;
 import com.gafarov.bastion.controller.auth.RegisterRequest;
 import com.gafarov.bastion.entity.Role;
 import com.gafarov.bastion.entity.User;
-import com.gafarov.bastion.repository.UserRepository;
 import com.gafarov.bastion.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserService userService;
-    private final UserRepository repository;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -30,8 +29,9 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.password()))
                 .role(Role.USER)
                 .build();
-        userService.addNewUser(user);
+        var savedUser = userService.addNewUser(user);
         var jwtToken = jwtService.generateToken(user);
+        tokenService.saveUserToken(savedUser, jwtToken);
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -44,6 +44,8 @@ public class AuthenticationService {
         );
         User user = userService.findUserByEmail(request.email());
         var jwtToken = jwtService.generateToken(user);
+        tokenService.revokeAllUserTokens(user);
+        tokenService.saveUserToken(user, jwtToken);
         return new AuthenticationResponse(jwtToken);
     }
 }

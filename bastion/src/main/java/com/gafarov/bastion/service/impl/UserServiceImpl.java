@@ -5,24 +5,31 @@ import com.gafarov.bastion.exception.ConflictDataException;
 import com.gafarov.bastion.exception.UserNotFoundException;
 import com.gafarov.bastion.repository.UserRepository;
 import com.gafarov.bastion.service.UserService;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public void addNewUser(User user) {
+    public User addNewUser(User user) {
         try {
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            return savedUser;
         } catch (DataIntegrityViolationException exception) {
             throw new ConflictDataException(
-                    String.format("Email %s is already in use", user.getEmail()),
+                    String.format("email %s уже используется", user.getEmail()),
                     exception
             );
         }
