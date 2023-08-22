@@ -1,6 +1,6 @@
 package com.gafarov.bastion.service.impl;
 
-import com.gafarov.bastion.entity.User;
+import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.exception.ConflictDataException;
 import com.gafarov.bastion.repository.UserRepository;
 import jakarta.validation.ConstraintViolationException;

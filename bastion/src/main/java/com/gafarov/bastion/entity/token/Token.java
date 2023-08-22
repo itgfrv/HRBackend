@@ -1,5 +1,6 @@
-package com.gafarov.bastion.entity;
+package com.gafarov.bastion.entity.token;
 
+import com.gafarov.bastion.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

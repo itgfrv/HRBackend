@@ -1,4 +1,4 @@
-package com.gafarov.bastion.entity;
+package com.gafarov.bastion.entity.user;
 
 public enum Role {
     USER,
