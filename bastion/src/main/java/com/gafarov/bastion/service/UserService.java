@@ -1,6 +1,6 @@
 package com.gafarov.bastion.service;
 
-import com.gafarov.bastion.entity.User;
+import com.gafarov.bastion.entity.user.User;
 
 public interface UserService {
 

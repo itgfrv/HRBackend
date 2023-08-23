@@ -1,5 +1,6 @@
-package com.gafarov.bastion.entity;
+package com.gafarov.bastion.entity.user;
 
+import com.gafarov.bastion.entity.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +23,8 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "users_id_seq", allocationSize = 1)
     private Integer id;
     @Column(unique = true)
     @Email
@@ -36,6 +38,10 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+    @Enumerated(EnumType.STRING)
+    private Activity activity;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 

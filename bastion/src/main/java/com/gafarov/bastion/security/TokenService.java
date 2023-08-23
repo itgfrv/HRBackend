@@ -1,8 +1,8 @@
 package com.gafarov.bastion.security;
 
-import com.gafarov.bastion.entity.Token;
-import com.gafarov.bastion.entity.TokenType;
-import com.gafarov.bastion.entity.User;
+import com.gafarov.bastion.entity.token.Token;
+import com.gafarov.bastion.entity.token.TokenType;
+import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 

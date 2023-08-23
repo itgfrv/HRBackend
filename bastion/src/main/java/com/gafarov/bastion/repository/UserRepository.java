@@ -1,6 +1,6 @@
 package com.gafarov.bastion.repository;
 
-import com.gafarov.bastion.entity.User;
+import com.gafarov.bastion.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController extends BaseController {
     private final AuthenticationService authenticationService;
@@ -18,6 +18,7 @@ public class AuthenticationController extends BaseController {
     public AuthenticationResponse register(
             @RequestBody RegisterRequest request
     ) {
+        System.out.println(request.email());
         return authenticationService.register(request);
     }
 
