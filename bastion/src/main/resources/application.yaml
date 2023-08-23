@@ -1,0 +1,25 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: /db/changelog/master.xml
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:postgres}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+  jpa:
+    show-sql: true
+    database: postgresql
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET:WS8ShcPWpwyhJcF4QggP2GMsG09mocYzEelRXWeH1K0=}
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: swagger
+server:
+  servlet:
+    context-path: /api/v1

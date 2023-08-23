@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="gafarov">
+        <sql>
+            CREATE TABLE resume
+            (
+                id                  SERIAL PRIMARY KEY,
+                user_id             INT NOT NULL ,
+                phone_number        VARCHAR(255),
+                email               VARCHAR(255),
+                military_duty       VARCHAR(255),
+                education           VARCHAR(255),
+                metro_station       VARCHAR(255),
+                good_qualities      VARCHAR(2000),
+                bad_qualities       VARCHAR(2000),
+                bad_habits          VARCHAR(2000),
+                reasons_for_working VARCHAR(2000),
+                good_job_qualities  VARCHAR(2000),
+                busyness            VARCHAR(2000),
+                resume_src          VARCHAR(255),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
