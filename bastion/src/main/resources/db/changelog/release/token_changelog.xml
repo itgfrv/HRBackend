@@ -4,7 +4,18 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="0" author="admin">
-
+    <changeSet id="1" author="gafarov">
+        <sql>
+            CREATE TABLE token
+            (
+                id      SERIAL  PRIMARY KEY,
+                token   VARCHAR(255) NOT NULL,
+                type    VARCHAR(255),
+                expired BOOLEAN,
+                revoked BOOLEAN,
+                user_id INT,
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            );
+        </sql>
     </changeSet>
 </databaseChangeLog>

@@ -32,7 +32,7 @@ public class FormController {
             @RequestParam(required = false, name = "filter_param") Activity filterParam,
             @AuthenticationPrincipal User user
     ) {
-        if (user.getRole() != Role.ADMIN) throw new ForbiddenException();
+        if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         Pageable pageable = PageRequest.of(page, size);
         return null;
     }

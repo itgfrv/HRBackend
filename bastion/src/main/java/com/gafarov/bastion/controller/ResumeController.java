@@ -9,9 +9,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/resume")
+@RestController
+@RequestMapping("/resume")
 @AllArgsConstructor
-public class ResumeController {
+public class ResumeController extends BaseController{
     private final ResumeServiceImpl service;
 
     @GetMapping
@@ -25,7 +26,7 @@ public class ResumeController {
             @RequestBody ResumeDto resumeDto
     ) {
         if (user.getActivity() != Activity.REGISTERED) {
-            throw new ForbiddenException();
+            throw new ForbiddenException("cant save already saved resume");
         }
         return service.sendResume(resumeDto, user);
     }
@@ -36,7 +37,7 @@ public class ResumeController {
             @RequestBody ResumeDto resumeDto
     ) {
         if (user.getActivity() != Activity.REGISTERED) {
-            throw new ForbiddenException();
+            throw new ForbiddenException("Cant change saved resume");
         }
         return service.updateResume(resumeDto, user);
     }

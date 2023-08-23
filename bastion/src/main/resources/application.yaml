@@ -1,11 +1,14 @@
 spring:
+  liquibase:
+    enabled: true
+    change-log: /db/changelog/master.xml
+
   datasource:
     url: jdbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:postgres}
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
   jpa:
-    hibernate.ddl-auto: create-drop
     show-sql: true
     database: postgresql
 application:

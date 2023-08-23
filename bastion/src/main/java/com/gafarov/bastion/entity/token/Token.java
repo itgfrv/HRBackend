@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Token {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_seq")
+    @SequenceGenerator(name = "token_seq", sequenceName = "token_id_seq", allocationSize = 1)
     private Integer id;
     private String token;
     @Enumerated(EnumType.STRING)

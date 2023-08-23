@@ -3,8 +3,6 @@ package com.gafarov.bastion.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record ResumeDto (
-        @JsonProperty("id")
-        Integer id,
         @JsonProperty("phone_number")
         String phoneNumber,
         String email,

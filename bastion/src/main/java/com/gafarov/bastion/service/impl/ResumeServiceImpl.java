@@ -10,6 +10,8 @@ import com.gafarov.bastion.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class ResumeServiceImpl {
@@ -17,8 +19,11 @@ public class ResumeServiceImpl {
     private final UserRepository userRepository;
 
     public ResumeDto getPersonalResume(int id) {
-        Resume resume = repository.findByUserId(id).orElseThrow();
-        return ResumeMapper.INSTANCE.mapResumeToResumeDto(resume);
+        Optional<Resume> resume = repository.findByUserId(id);
+        if(resume.isPresent()){
+            return ResumeMapper.INSTANCE.mapResumeToResumeDto(resume.get());
+        }
+        return new ResumeDto("","","","","","","","","","","","");
     }
 
     public ResumeDto sendResume(ResumeDto resumeDto, User user) {
@@ -33,6 +38,7 @@ public class ResumeServiceImpl {
     public ResumeDto updateResume(ResumeDto resumeDto, User user) {
         Resume r = ResumeMapper.INSTANCE.mapResumeDtoToResume(resumeDto);
         r.setUser(user);
+        r.setId(user.getId());
         var savedResume = repository.save(r);
         return ResumeMapper.INSTANCE.mapResumeToResumeDto(savedResume);
     }

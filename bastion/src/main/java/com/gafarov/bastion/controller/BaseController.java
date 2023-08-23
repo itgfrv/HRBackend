@@ -2,6 +2,7 @@ package com.gafarov.bastion.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gafarov.bastion.exception.ConflictDataException;
+import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -25,9 +26,13 @@ public class BaseController {
                 .map(constraintViolation -> String.format("%s %s;",
                         constraintViolation.getPropertyPath().toString(),
                         constraintViolation.getMessage()))
-                .collect(Collectors.toList())
+                .toList()
         );
         sendResponse(response, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+    @ExceptionHandler(ForbiddenException.class)
+    void handleForbidden(HttpServletResponse response, ForbiddenException exception) throws IOException {
+        sendResponse(response, HttpServletResponse.SC_FORBIDDEN, exception.getMessage());
     }
 
     void sendResponse(HttpServletResponse response, int status, String errorMsg) throws IOException {
