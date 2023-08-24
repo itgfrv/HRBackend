@@ -28,5 +28,10 @@ public class AuthenticationController extends BaseController {
     ) {
         return authenticationService.authenticate(request);
     }
+    @PostMapping("/create_admin")
+    public void createAdmin(
+    ){
+        authenticationService.createAdmin();
+    }
 
 }
