@@ -52,4 +52,17 @@ public class AuthenticationService {
         tokenService.saveUserToken(user, jwtToken);
         return new AuthenticationResponse(jwtToken);
     }
+    public void createAdmin(){
+        User user = User.builder()
+                .firstname("admin")
+                .lastname("admin")
+                .email("admin@mail.ru")
+                .password(passwordEncoder.encode("admin"))
+                .role(Role.ADMIN)
+                .activity(Activity.REGISTERED)
+                .userStatus(UserStatus.REJECT)
+                .build();
+        var savedUser = userService.addNewUser(user);
+
+    }
 }

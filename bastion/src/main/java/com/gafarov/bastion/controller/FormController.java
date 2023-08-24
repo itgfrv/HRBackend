@@ -34,7 +34,7 @@ public class FormController {
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         Pageable pageable = PageRequest.of(page, size);
-        return null;
+        return formService.getPaginationForm(pageable,filterParam);
     }
 
     @GetMapping("/{id}")
