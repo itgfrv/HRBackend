@@ -10,11 +10,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "quiz")
 public class Quiz {
     @Id
     private Integer id;
     @Enumerated(EnumType.STRING)
+    @Column(name = "quiz_type")
     private QuizType quizType;
-    @OneToMany
+    @OneToMany(mappedBy="quiz", fetch = FetchType.EAGER)
     private List<Question> questionList;
 }
