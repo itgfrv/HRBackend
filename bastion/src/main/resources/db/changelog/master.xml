@@ -7,4 +7,5 @@
     <include file="release/token_changelog.xml" relativeToChangelogFile="true"/>
     <include file="release/resume_changelog.xml" relativeToChangelogFile="true"/>
     <include file="release/quiz_changelog.xml" relativeToChangelogFile = "true"/>
+    <include file="release/result_changelog.xml" relativeToChangelogFile = "true"/>
 </databaseChangeLog>

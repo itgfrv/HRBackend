@@ -1,20 +1,36 @@
 package com.gafarov.bastion.controller;
 
-import com.gafarov.bastion.entity.quiz.Quiz;
-import com.gafarov.bastion.mapper.QuizMapper;
+import com.gafarov.bastion.entity.user.User;
+import com.gafarov.bastion.model.QuizAnswer;
 import com.gafarov.bastion.model.QuizDto;
-import com.gafarov.bastion.repository.QuizRepository;
+import com.gafarov.bastion.model.ResultDto;
+import com.gafarov.bastion.service.impl.QuizServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/quiz")
 @AllArgsConstructor
-public class QuizController {
-    private final QuizRepository quizRepository;
+public class QuizController extends BaseController {
+    private final QuizServiceImpl quizService;
+
     @GetMapping("/{id}")
-    public QuizDto getQuiz(@PathVariable Integer id){
-        return QuizMapper.INSTANCE.mapQuizToQuizDto( quizRepository.findById(id).orElseThrow());
+    public QuizDto getQuiz(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal User user
+    ) {
+        return quizService.getQuiz(id, user);
+    }
+
+    @PostMapping("/{id}")
+    public List<ResultDto> sendResult(
+            @PathVariable Integer id,
+            @RequestBody List<QuizAnswer> answers,
+            @AuthenticationPrincipal User user
+    ) {
+        return quizService.checkResult(answers,user,id);
     }
 }
