@@ -1,5 +1,6 @@
 package com.gafarov.bastion.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gafarov.bastion.entity.quiz.QuizType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,8 @@ import java.util.concurrent.CompletableFuture;
 @NoArgsConstructor
 public class QuizDto {
     private Integer id;
-    private List<QuestionDto> questionList;
+    @JsonProperty("quiz_type")
     private QuizType quizType;
+    @JsonProperty("questions")
+    private List<QuestionDto> questionList;
 }
