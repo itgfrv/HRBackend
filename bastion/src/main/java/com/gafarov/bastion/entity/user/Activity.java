@@ -4,7 +4,7 @@ public enum Activity {
     REGISTERED,
     RESUME,
     DEMO_TEST,
-    HOME_WORK,
+    WAITING_INTERVIEW,
     INTERVIEW,
-    END
+    WAITING_RESULT
 }
