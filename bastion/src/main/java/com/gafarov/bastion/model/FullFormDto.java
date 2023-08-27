@@ -16,5 +16,5 @@ public class FullFormDto {
     @JsonProperty("resume")
     private ResumeDto resumeDto;
     @JsonProperty("quiz_result")
-    private List<QuizResultDto> quizResultDtos;
+    private List<QuizResultDto> quizResult;
 }

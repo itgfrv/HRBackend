@@ -12,11 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class FormController {
     private final FormServiceImpl formService;
+
     @GetMapping
     public List<FormDto> getUsersForm(
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
@@ -34,11 +31,12 @@ public class FormController {
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         Pageable pageable = PageRequest.of(page, size);
-        return formService.getPaginationForm(pageable,filterParam);
+        return formService.getPaginationForm(pageable, filterParam);
     }
 
     @GetMapping("/{id}")
-    public FullFormDto getUserForm() {
-        return null;
+    public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
+        if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
+        return formService.getUserInfo(id);
     }
 }

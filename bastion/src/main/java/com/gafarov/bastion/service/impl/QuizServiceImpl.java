@@ -8,11 +8,13 @@ import com.gafarov.bastion.entity.quiz.QuestionType;
 import com.gafarov.bastion.entity.quiz.Quiz;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
+import com.gafarov.bastion.entity.user.UserStatus;
 import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.mapper.QuizMapper;
 import com.gafarov.bastion.mapper.ResultMapper;
 import com.gafarov.bastion.model.QuizAnswer;
 import com.gafarov.bastion.model.QuizDto;
+import com.gafarov.bastion.model.QuizResultDto;
 import com.gafarov.bastion.model.ResultDto;
 import com.gafarov.bastion.repository.QuizRepository;
 import com.gafarov.bastion.repository.ResultRepository;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -48,7 +51,7 @@ public class QuizServiceImpl {
     }
 
     public List<ResultDto> checkResult(List<QuizAnswer> answerList, User user, Integer quizId) {
-        if ((quizId == 1 && user.getActivity() == Activity.RESUME) || (quizId == 2 && user.getActivity() == Activity.INTERVIEW)) {
+        if ((quizId == 1 && user.getActivity() == Activity.RESUME) || (quizId == 2 && user.getUserStatus() == UserStatus.INTERVIEW)) {
 
             Quiz quiz = quizRepository.findById(quizId).orElseThrow();
 
@@ -89,6 +92,21 @@ public class QuizServiceImpl {
             }
             return results.stream().map(ResultMapper.INSTANCE::mapResultToResultDto).toList();
         }else throw new ForbiddenException("u cant send test");
+    }
+    public List<QuizResultDto> getUserResult(Integer userId){
+        List<UserResult> userResults = userResultRepository.findAllByUserId(userId);
+        List<QuizResultDto> resultDtos = new ArrayList<>();
+        for (var userResult:userResults){
+            if(userResult.getEndTime()!=null){
+                QuizResultDto res = new QuizResultDto();
+                res.setResult(userResult.getResults().stream().map(ResultMapper.INSTANCE::mapResultToResultDto).collect(Collectors.toList()));
+                res.setType(userResult.getQuiz().getQuizType());
+                Long duration = userResult.getEndTime().toInstant().toEpochMilli()-userResult.getStartTime().toInstant().toEpochMilli();
+                res.setDuration(duration);
+                resultDtos.add(res);
+            }
+        }
+        return resultDtos;
     }
 
 }

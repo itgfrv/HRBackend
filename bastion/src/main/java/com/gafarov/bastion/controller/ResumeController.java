@@ -17,7 +17,7 @@ public class ResumeController extends BaseController{
 
     @GetMapping
     public ResumeDto getPersonalResume(@AuthenticationPrincipal User user) {
-        return service.getPersonalResume(user.getId());
+        return service.getResume(user.getId());
     }
 
     @PostMapping

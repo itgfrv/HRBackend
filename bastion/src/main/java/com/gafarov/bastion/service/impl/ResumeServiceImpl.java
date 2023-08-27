@@ -18,8 +18,8 @@ public class ResumeServiceImpl {
     private final ResumeRepository repository;
     private final UserRepository userRepository;
 
-    public ResumeDto getPersonalResume(int id) {
-        Optional<Resume> resume = repository.findByUserId(id);
+    public ResumeDto getResume(int userId) {
+        Optional<Resume> resume = repository.findByUserId(userId);
         if(resume.isPresent()){
             return ResumeMapper.INSTANCE.mapResumeToResumeDto(resume.get());
         }

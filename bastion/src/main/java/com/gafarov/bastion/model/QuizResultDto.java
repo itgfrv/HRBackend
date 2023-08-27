@@ -13,4 +13,5 @@ import java.util.List;
 public class QuizResultDto {
     private QuizType type;
     private List<ResultDto> result;
+    private Long duration;
 }
