@@ -31,6 +31,6 @@ public class QuizController extends BaseController {
             @RequestBody List<QuizAnswer> answers,
             @AuthenticationPrincipal User user
     ) {
-        return quizService.checkResult(answers,user,id);
+        return quizService.checkResult(answers, user, id);
     }
 }

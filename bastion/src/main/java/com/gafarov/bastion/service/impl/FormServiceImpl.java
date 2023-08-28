@@ -29,19 +29,20 @@ public class FormServiceImpl {
         List<User> users = page.getContent();
         return users.stream().map(this::mapUserToForm).toList();
     }
-    private FormDto mapUserToForm(User user){
+
+    private FormDto mapUserToForm(User user) {
         return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), user.getActivity());
     }
-    public FullFormDto getUserInfo(Integer id){
+
+    public FullFormDto getUserInfo(Integer id) {
         FullFormDto fullForm = new FullFormDto();
         Optional<User> u = userRepository.findById(id);
-        if(u.isEmpty()) throw new BadRequestException("НЕТ ТАКИХ ДУРИКОВ");
+        if (u.isEmpty()) throw new BadRequestException("НЕТ ТАКИХ ДУРИКОВ");
         fullForm.setUser(mapUserToForm(u.get()));
         fullForm.setResumeDto(resumeService.getResume(id));
         fullForm.setQuizResult(quizService.getUserResult(id));
         return fullForm;
     }
-
 
 
 }

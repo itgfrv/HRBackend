@@ -4,5 +4,4 @@ public enum QuestionType {
     MATH,
     VISUALIZATION,
     LOGIC,
-
 }

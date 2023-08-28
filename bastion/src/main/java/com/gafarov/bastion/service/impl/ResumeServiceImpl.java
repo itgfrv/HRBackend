@@ -20,10 +20,10 @@ public class ResumeServiceImpl {
 
     public ResumeDto getResume(int userId) {
         Optional<Resume> resume = repository.findByUserId(userId);
-        if(resume.isPresent()){
+        if (resume.isPresent()) {
             return ResumeMapper.INSTANCE.mapResumeToResumeDto(resume.get());
         }
-        return new ResumeDto("","","","","","","","","","","","");
+        return new ResumeDto("", "", "", "", "", "", "", "", "", "", "", "");
     }
 
     public ResumeDto sendResume(ResumeDto resumeDto, User user) {

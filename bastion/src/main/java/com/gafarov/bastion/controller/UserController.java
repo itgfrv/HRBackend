@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController extends BaseController {
     private final UserServiceImpl userService;
+
     @PutMapping("/{id}")
     public void changeUserStatus(
             @PathVariable Integer id,
@@ -21,6 +22,6 @@ public class UserController extends BaseController {
             @AuthenticationPrincipal User user
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
-        userService.changeUserStatus(id,status);
+        userService.changeUserStatus(id, status);
     }
 }

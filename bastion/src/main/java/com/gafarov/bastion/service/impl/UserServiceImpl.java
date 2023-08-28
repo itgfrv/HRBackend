@@ -42,6 +42,6 @@ public class UserServiceImpl implements UserService {
         if(user.isEmpty()) throw new BadRequestException("нет дурика");
         User u = user.get();
         u.setUserStatus(userStatus);
-        userRepository.save(u);
+        userRepository.save(u); 
     }
 }

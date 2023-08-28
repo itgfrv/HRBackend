@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/resume")
 @AllArgsConstructor
-public class ResumeController extends BaseController{
+public class ResumeController extends BaseController {
     private final ResumeServiceImpl service;
 
     @GetMapping

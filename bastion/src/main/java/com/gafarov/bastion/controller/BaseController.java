@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.stream.Collectors;
 
 public class BaseController {
     @ExceptionHandler(ConflictDataException.class)
@@ -30,6 +29,7 @@ public class BaseController {
         );
         sendResponse(response, HttpServletResponse.SC_BAD_REQUEST, message);
     }
+
     @ExceptionHandler(ForbiddenException.class)
     void handleForbidden(HttpServletResponse response, ForbiddenException exception) throws IOException {
         sendResponse(response, HttpServletResponse.SC_FORBIDDEN, exception.getMessage());

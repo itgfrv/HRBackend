@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -17,6 +18,6 @@ public class Quiz {
     @Enumerated(EnumType.STRING)
     @Column(name = "quiz_type")
     private QuizType quizType;
-    @OneToMany(mappedBy="quiz", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
     private List<Question> questionList;
 }

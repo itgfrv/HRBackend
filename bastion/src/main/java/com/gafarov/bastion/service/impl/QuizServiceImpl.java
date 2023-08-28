@@ -82,26 +82,27 @@ public class QuizServiceImpl {
             }
             userResult.setEndTime(OffsetDateTime.now());
             userResultRepository.save(userResult);
-            if (quizId == 1){
+            if (quizId == 1) {
                 user.setActivity(Activity.WAITING_INTERVIEW);
                 userRepository.save(user);
             }
-            if(quizId==2){
+            if (quizId == 2) {
                 user.setActivity(Activity.WAITING_RESULT);
                 userRepository.save(user);
             }
             return results.stream().map(ResultMapper.INSTANCE::mapResultToResultDto).toList();
-        }else throw new ForbiddenException("u cant send test");
+        } else throw new ForbiddenException("u cant send test");
     }
-    public List<QuizResultDto> getUserResult(Integer userId){
+
+    public List<QuizResultDto> getUserResult(Integer userId) {
         List<UserResult> userResults = userResultRepository.findAllByUserId(userId);
         List<QuizResultDto> resultDtos = new ArrayList<>();
-        for (var userResult:userResults){
-            if(userResult.getEndTime()!=null){
+        for (var userResult : userResults) {
+            if (userResult.getEndTime() != null) {
                 QuizResultDto res = new QuizResultDto();
                 res.setResult(userResult.getResults().stream().map(ResultMapper.INSTANCE::mapResultToResultDto).collect(Collectors.toList()));
                 res.setType(userResult.getQuiz().getQuizType());
-                Long duration = userResult.getEndTime().toInstant().toEpochMilli()-userResult.getStartTime().toInstant().toEpochMilli();
+                Long duration = userResult.getEndTime().toInstant().toEpochMilli() - userResult.getStartTime().toInstant().toEpochMilli();
                 res.setDuration(duration);
                 resultDtos.add(res);
             }
