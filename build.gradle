@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.bmuschko.docker-java-application' version '7.4.0'
     id 'com.bmuschko.docker-remote-api' version '7.4.0'
+    id 'jacoco'
 }
 
 
@@ -48,4 +49,46 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude : [
+                    "com/gafarov/bastion/mapper/*",
+                    "com/gafarov/bastion/model/*",
+                    "com/gafarov/bastion/entity/*",
+                    "com/gafarov/bastion/BastionApplication.class"
+            ])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude : [
+                    "com/gafarov/bastion/mapper/*",
+                    "com/gafarov/bastion/model/*",
+                    "com/gafarov/bastion/entity/*",
+                    "com/gafarov/bastion/BastionApplication.class"
+            ])
+        }))
+    }
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.0
+            }
+        }
+    }
 }
