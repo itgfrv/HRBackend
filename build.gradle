@@ -6,7 +6,11 @@ plugins {
     id 'com.bmuschko.docker-remote-api' version '7.4.0'
     id 'jacoco'
 }
-
+ext {
+    set("testcontainersVersion", "1.17.3")
+    set("dockerImage", "com.gafarov/backend")
+    set("dockerRootRepo", "latest")
+}
 
 group = 'com.gafarov'
 version = '0.0.1-SNAPSHOT'
@@ -90,5 +94,15 @@ jacocoTestCoverageVerification {
                 minimum = 0.0
             }
         }
+    }
+}
+docker {
+    javaApplication {
+        baseImage = 'openjdk:17.0.1-jdk-slim'
+        ports = [8080]
+        jvmArgs = ['-Xms256m', '-Xmx1024m']
+        images = [
+                "${dockerImage}:${dockerRootRepo}"
+        ]
     }
 }

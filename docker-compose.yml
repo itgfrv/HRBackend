@@ -1,15 +1,16 @@
-version: "3.9"
+version: '3.9'
+
 services:
-  postgres:
-    image: postgres:15.3
-    container_name: "postgres"
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    command: postgres -p ${POSTGRES_PORT}
+  backend:
+    image: com.gafarov/backend:latest
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - "8080:8080"
+    networks:
+      monitoring:
+    environment:
+      - SPRING_DATASOURCE_URL=${PSQL_JDBC_URL}
+      - SPRING_DATASOURCE_USERNAME=${PSQL_JDBC_USER}
+      - SPRING_DATASOURCE_PASSWORD=${PSQL_JDBC_PASS}
 
     
     
