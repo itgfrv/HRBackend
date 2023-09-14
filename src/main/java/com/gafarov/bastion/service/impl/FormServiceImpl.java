@@ -37,7 +37,7 @@ public class FormServiceImpl {
     public FullFormDto getUserInfo(Integer id) {
         FullFormDto fullForm = new FullFormDto();
         Optional<User> u = userRepository.findById(id);
-        if (u.isEmpty()) throw new BadRequestException("НЕТ ТАКИХ ДУРИКОВ");
+        if (u.isEmpty()) throw new BadRequestException("no users with this id");
         fullForm.setUser(mapUserToForm(u.get()));
         fullForm.setResumeDto(resumeService.getResume(id));
         fullForm.setQuizResult(quizService.getUserResult(id));

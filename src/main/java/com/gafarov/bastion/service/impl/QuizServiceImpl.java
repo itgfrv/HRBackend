@@ -48,7 +48,7 @@ public class QuizServiceImpl implements QuizService {
                 userResultRepository.save(ur);
             }
             return QuizMapper.INSTANCE.mapQuizToQuizDto(q);
-        } else throw new ForbiddenException("u cant write this test");
+        } else throw new ForbiddenException("you cant write this test");
     }
 
     public List<ResultDto> checkResult(List<QuizAnswer> answerList, User user, Integer quizId) {
