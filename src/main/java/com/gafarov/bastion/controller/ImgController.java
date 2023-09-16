@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/img")
 @AllArgsConstructor
-@CrossOrigin(maxAge = 360000)
+
 public class ImgController {
     @Autowired
     private ImgService imgService;
-    @CrossOrigin
+    @CrossOrigin(origins = "http://94.241.140.221:8080")
     @GetMapping(value = "/{file}", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] downloadImg(@PathVariable String file) throws Exception {
         return imgService.getImageObject(file);
