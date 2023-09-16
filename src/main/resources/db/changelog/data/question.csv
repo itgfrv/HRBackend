@@ -1,6 +1,6 @@
 id,img_src,question,question_type,quiz_id
-1,http://94.241.140.221:8080/api/v1/img/cat.jpg,q,MATH,1
-2,http://94.241.140.221:8080/api/v1/img/cat.jpg,w,VISUALIZATION,1
-3,http://94.241.140.221:8080/api/v1/img/cat.jpg,e,VISUALIZATION,1
-4,http://94.241.140.221:8080/api/v1/img/cat.jpg,r,LOGIC,1
-5,http://94.241.140.221:8080/api/v1/img/cat.jpg,t,MATH,1
+1,https://s3.timeweb.com/48743bfe-klimik/cat.jpg,q,MATH,1
+2,https://s3.timeweb.com/48743bfe-klimik/cat.jpg,w,VISUALIZATION,1
+3,https://s3.timeweb.com/48743bfe-klimik/cat.jpg,e,VISUALIZATION,1
+4,https://s3.timeweb.com/48743bfe-klimik/cat.jpg,r,LOGIC,1
+5,https://s3.timeweb.com/48743bfe-klimik/cat.jpg,t,MATH,1

@@ -6,6 +6,7 @@ import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.FormDto;
 import com.gafarov.bastion.model.FullFormDto;
+import com.gafarov.bastion.model.PersonalInfo;
 import com.gafarov.bastion.service.impl.FormServiceImpl;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,9 @@ public class FormController {
     public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
+    }
+    @GetMapping ("/personal")
+    public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user){
+        return new PersonalInfo(user.getId(),user.getEmail(),user.getFirstname(),user.getLastname(),user.getRole(),user.getUserStatus(),user.getActivity());
     }
 }
