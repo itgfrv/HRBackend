@@ -7,18 +7,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-
+@CrossOrigin(maxAge = 360000)
 @RequiredArgsConstructor
 public class AuthenticationController extends BaseController {
     private final AuthenticationService authenticationService;
-    @CrossOrigin
     @PostMapping("/register")
     public AuthenticationResponse register(
             @RequestBody RegisterRequest request
     ) {
         return authenticationService.register(request);
     }
-    @CrossOrigin
+
     @PostMapping("/authenticate")
     public AuthenticationResponse authenticate(
             @RequestBody AuthenticationRequest request

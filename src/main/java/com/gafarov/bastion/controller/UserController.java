@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
+@CrossOrigin(maxAge = 360000)
 public class UserController extends BaseController {
     private final UserServiceImpl userService;
-    @CrossOrigin
     @PutMapping("/{id}")
     public void changeUserStatus(
             @PathVariable Integer id,

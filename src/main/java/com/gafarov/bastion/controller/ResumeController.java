@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/resume")
 @AllArgsConstructor
+@CrossOrigin(maxAge = 360000)
 public class ResumeController extends BaseController {
     private final ResumeServiceImpl service;
-    @CrossOrigin
+
     @GetMapping
     public ResumeDto getPersonalResume(@AuthenticationPrincipal User user) {
         return service.getResume(user.getId());
@@ -30,7 +31,7 @@ public class ResumeController extends BaseController {
         }
         return service.sendResume(resumeDto, user);
     }
-    @CrossOrigin
+
     @PutMapping
     public ResumeDto updateResume(
             @AuthenticationPrincipal User user,
