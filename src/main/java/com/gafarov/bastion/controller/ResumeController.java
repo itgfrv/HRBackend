@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ResumeController extends BaseController {
     private final ResumeServiceImpl service;
-
+    @CrossOrigin
     @GetMapping
     public ResumeDto getPersonalResume(@AuthenticationPrincipal User user) {
         return service.getResume(user.getId());
     }
-
+    @CrossOrigin
     @PostMapping
     public ResumeDto sendResume(
             @AuthenticationPrincipal User user,
@@ -30,7 +30,7 @@ public class ResumeController extends BaseController {
         }
         return service.sendResume(resumeDto, user);
     }
-
+    @CrossOrigin
     @PutMapping
     public ResumeDto updateResume(
             @AuthenticationPrincipal User user,

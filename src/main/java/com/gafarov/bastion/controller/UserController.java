@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController extends BaseController {
     private final UserServiceImpl userService;
-
+    @CrossOrigin
     @PutMapping("/{id}")
     public void changeUserStatus(
             @PathVariable Integer id,

@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class QuizController extends BaseController {
     private final QuizServiceImpl quizService;
-
+    @CrossOrigin
     @GetMapping("/{id}")
     public QuizDto getQuiz(
             @PathVariable Integer id,
@@ -24,7 +24,7 @@ public class QuizController extends BaseController {
     ) {
         return quizService.getQuiz(id, user);
     }
-
+    @CrossOrigin
     @PostMapping("/{id}")
     public List<ResultDto> sendResult(
             @PathVariable Integer id,
