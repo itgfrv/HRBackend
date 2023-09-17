@@ -20,9 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/form")
 @AllArgsConstructor
+@CrossOrigin
 public class FormController {
     private final FormServiceImpl formService;
-    @CrossOrigin(origins = "http://94.241.140.221:8080")
     @GetMapping
     public List<FormDto> getUsersForm(
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
@@ -34,13 +34,13 @@ public class FormController {
         Pageable pageable = PageRequest.of(page, size);
         return formService.getPaginationForm(pageable, filterParam);
     }
-    @CrossOrigin(origins = "http://94.241.140.221:8080")
+
     @GetMapping("/{id}")
     public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
     }
-    @CrossOrigin(origins = "http://94.241.140.221:8080")
+
     @GetMapping ("/personal")
     public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user){
         return new PersonalInfo(user.getId(),user.getEmail(),user.getFirstname(),user.getLastname(),user.getRole(),user.getUserStatus(),user.getActivity());

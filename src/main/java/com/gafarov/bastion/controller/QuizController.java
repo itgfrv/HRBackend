@@ -14,10 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 @AllArgsConstructor
-
+@CrossOrigin
 public class QuizController extends BaseController {
     private final QuizServiceImpl quizService;
-    @CrossOrigin(origins = "http://94.241.140.221:8080")
+
     @GetMapping("/{id}")
     public QuizDto getQuiz(
             @PathVariable Integer id,
@@ -25,7 +25,7 @@ public class QuizController extends BaseController {
     ) {
         return quizService.getQuiz(id, user);
     }
-    @CrossOrigin(origins = "http://94.241.140.221:8080")
+
     @PostMapping("/{id}")
     public List<ResultDto> sendResult(
             @PathVariable Integer id,
