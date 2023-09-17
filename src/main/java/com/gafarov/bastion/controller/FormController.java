@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/form")
 @AllArgsConstructor
-
 public class FormController {
     private final FormServiceImpl formService;
     @CrossOrigin(origins = "http://94.241.140.221:8080")
@@ -41,6 +40,7 @@ public class FormController {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
     }
+    @CrossOrigin(origins = "http://94.241.140.221:8080")
     @GetMapping ("/personal")
     public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user){
         return new PersonalInfo(user.getId(),user.getEmail(),user.getFirstname(),user.getLastname(),user.getRole(),user.getUserStatus(),user.getActivity());
