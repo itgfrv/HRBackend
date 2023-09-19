@@ -17,48 +17,37 @@ import com.gafarov.bastion.model.QuizDto;
 import com.gafarov.bastion.model.QuizResultDto;
 import com.gafarov.bastion.model.ResultDto;
 import com.gafarov.bastion.repository.QuizRepository;
-import com.gafarov.bastion.repository.ResultRepository;
 import com.gafarov.bastion.repository.UserRepository;
-import com.gafarov.bastion.repository.UserResultRepository;
 import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
-    private final UserResultRepository userResultRepository;
-    private final ResultRepository repository;
-    private final UserRepository userRepository;
+    private final UserResultServiceImpl userResultService;
+    private final UserServiceImpl userService;
 
     public QuizDto getQuiz(Integer quizId, User user) {
         if ((quizId == 1 && user.getActivity() == Activity.RESUME) || (quizId == 2 && user.getActivity() == Activity.INTERVIEW)) {
-            Quiz q = quizRepository.findById(quizId).orElseThrow();
-            Optional<UserResult> userResult = userResultRepository.findByUserIdAndQuizId(user.getId(), quizId);
-            if (userResult.isEmpty()) {
-                UserResult ur = new UserResult();
-                ur.setQuiz(q);
-                ur.setUser(user);
-                ur.setStartTime(OffsetDateTime.now());
-                userResultRepository.save(ur);
-            }
-            return QuizMapper.INSTANCE.mapQuizToQuizDto(q);
+            Quiz quiz = quizRepository.findById(quizId).orElseThrow();
+            userResultService.createUserResult(user, quiz);
+            return QuizMapper.INSTANCE.mapQuizToQuizDto(quiz);
         } else throw new ForbiddenException("you cant write this test");
     }
 
     public List<ResultDto> checkResult(List<QuizAnswer> answerList, User user, Integer quizId) {
         if ((quizId == 1 && user.getActivity() == Activity.RESUME) || (quizId == 2 && user.getUserStatus() == UserStatus.INTERVIEW)) {
-
             Quiz quiz = quizRepository.findById(quizId).orElseThrow();
-
             Map<QuestionType, Integer> result = new HashMap<>();
             Map<QuestionType, Integer> maxResult = new HashMap<>();
-
             List<Question> questions = quiz.getQuestionList();
             for (Question question : questions) {
                 maxResult.put(question.getQuestionType(), maxResult.getOrDefault(question.getQuestionType(), 0) + 1);
@@ -70,33 +59,19 @@ public class QuizServiceImpl implements QuizService {
                     }
                 }
             }
-            UserResult userResult = userResultRepository.findByUserIdAndQuizId(user.getId(), quizId).orElseThrow();
-            List<Result> results = new ArrayList<>();
-            for (var questionType : maxResult.keySet()) {
-                Result res = new Result();
-                res.setResult(result.getOrDefault(questionType, 0));
-                res.setMaxResult(maxResult.get(questionType));
-                res.setQuestionType(questionType);
-                res.setUserResult(userResult);
-                var savedRes = repository.save(res);
-                results.add(savedRes);
-            }
-            userResult.setEndTime(OffsetDateTime.now());
-            userResultRepository.save(userResult);
+            List<Result> results = userResultService.saveResult(result, maxResult, user, quiz);
             if (quizId == 1) {
-                user.setActivity(Activity.WAITING_INTERVIEW);
-                userRepository.save(user);
+                userService.updateActivity(user,Activity.WAITING_INTERVIEW);
             }
             if (quizId == 2) {
-                user.setActivity(Activity.WAITING_RESULT);
-                userRepository.save(user);
+                userService.updateActivity(user,Activity.WAITING_RESULT);
             }
             return results.stream().map(ResultMapper.INSTANCE::mapResultToResultDto).toList();
         } else throw new ForbiddenException("u cant send test");
     }
 
     public List<QuizResultDto> getUserResult(Integer userId) {
-        List<UserResult> userResults = userResultRepository.findAllByUserId(userId);
+        List<UserResult> userResults = userResultService.getUserResult(userId);
         List<QuizResultDto> resultDtos = new ArrayList<>();
         for (var userResult : userResults) {
             if (userResult.getEndTime() != null) {

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserService userService;
-    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -35,7 +34,6 @@ public class AuthenticationService {
                 .build();
         var savedUser = userService.addNewUser(user);
         var jwtToken = jwtService.generateToken(user);
-        tokenService.saveUserToken(savedUser, jwtToken);
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -48,21 +46,6 @@ public class AuthenticationService {
         );
         User user = userService.findUserByEmail(request.email());
         var jwtToken = jwtService.generateToken(user);
-        tokenService.revokeAllUserTokens(user);
-        tokenService.saveUserToken(user, jwtToken);
         return new AuthenticationResponse(jwtToken);
-    }
-    public void createAdmin(){
-        User user = User.builder()
-                .firstname("admin")
-                .lastname("admin")
-                .email("admin@mail.ru")
-                .password(passwordEncoder.encode("admin"))
-                .role(Role.ADMIN)
-                .activity(Activity.REGISTERED)
-                .userStatus(UserStatus.REJECT)
-                .build();
-        var savedUser = userService.addNewUser(user);
-
     }
 }

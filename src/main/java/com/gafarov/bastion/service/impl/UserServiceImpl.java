@@ -1,5 +1,6 @@
 package com.gafarov.bastion.service.impl;
 
+import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.entity.user.UserStatus;
 import com.gafarov.bastion.exception.BadRequestException;
@@ -43,5 +44,9 @@ public class UserServiceImpl implements UserService {
         User u = user.get();
         u.setUserStatus(userStatus);
         userRepository.save(u);
+    }
+    public void updateActivity(User user, Activity activity){
+        user.setActivity(activity);
+        userRepository.save(user);
     }
 }
