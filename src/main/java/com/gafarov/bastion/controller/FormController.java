@@ -26,7 +26,7 @@ public class FormController {
     @GetMapping
     public List<FormDto> getUsersForm(
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
-            @RequestParam(required = false, defaultValue = "2") @Min(1) int size,
+            @RequestParam(required = false, defaultValue = "100") @Min(1) int size,
             @RequestParam(required = false, name = "filter_param") Activity filterParam,
             @AuthenticationPrincipal User user
     ) {
