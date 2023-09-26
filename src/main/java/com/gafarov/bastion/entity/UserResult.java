@@ -1,6 +1,7 @@
 package com.gafarov.bastion.entity;
 
 import com.gafarov.bastion.entity.quiz.Quiz;
+import com.gafarov.bastion.entity.quiz.Result;
 import com.gafarov.bastion.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

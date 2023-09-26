@@ -1,9 +1,9 @@
 package com.gafarov.bastion.service.impl;
 
-import com.gafarov.bastion.entity.Result;
 import com.gafarov.bastion.entity.UserResult;
 import com.gafarov.bastion.entity.quiz.QuestionType;
 import com.gafarov.bastion.entity.quiz.Quiz;
+import com.gafarov.bastion.entity.quiz.Result;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.repository.ResultRepository;
 import com.gafarov.bastion.repository.UserResultRepository;

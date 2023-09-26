@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController extends BaseController {
     private final AuthenticationService authenticationService;
+
     @PostMapping("/register")
     public AuthenticationResponse register(
             @RequestBody RegisterRequest request

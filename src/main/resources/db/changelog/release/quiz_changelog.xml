@@ -8,23 +8,23 @@
         <sql>
             CREATE TABLE quiz
             (
-                id       INT PRIMARY KEY,
+                id        INT PRIMARY KEY,
                 quiz_type VARCHAR(255)
             );
             CREATE TABLE question
             (
-                id           INT PRIMARY KEY,
+                id            INT PRIMARY KEY,
                 img_src       VARCHAR(255),
-                question     VARCHAR(1000),
+                question      VARCHAR(1000),
                 question_type VARCHAR(255),
-                quiz_id      INT,
+                quiz_id       INT,
                 FOREIGN KEY (quiz_id) REFERENCES quiz (id)
             );
             CREATE TABLE answer
             (
                 id          INT PRIMARY KEY,
                 answer      VARCHAR(255),
-                is_correct   BOOLEAN,
+                is_correct  BOOLEAN,
                 question_id INT,
                 FOREIGN KEY (question_id) REFERENCES question (id)
             );
@@ -32,9 +32,9 @@
 
     </changeSet>
     <changeSet id="2" author="gafarov">
-        <loadData file="db/changelog/data/quiz.csv" tableName="quiz" />
-        <loadData file="db/changelog/data/question.csv" tableName="question" />
-        <loadData file="db/changelog/data/answer.csv" tableName="answer" />
+        <loadData file="db/changelog/data/quiz.csv" tableName="quiz"/>
+        <loadData file="db/changelog/data/question.csv" tableName="question"/>
+        <loadData file="db/changelog/data/answer.csv" tableName="answer"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,11 +1,7 @@
 package com.gafarov.bastion.service.impl;
 
-import com.gafarov.bastion.entity.Result;
 import com.gafarov.bastion.entity.UserResult;
-import com.gafarov.bastion.entity.quiz.Answer;
-import com.gafarov.bastion.entity.quiz.Question;
-import com.gafarov.bastion.entity.quiz.QuestionType;
-import com.gafarov.bastion.entity.quiz.Quiz;
+import com.gafarov.bastion.entity.quiz.*;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.entity.user.UserStatus;
@@ -17,7 +13,6 @@ import com.gafarov.bastion.model.QuizDto;
 import com.gafarov.bastion.model.QuizResultDto;
 import com.gafarov.bastion.model.ResultDto;
 import com.gafarov.bastion.repository.QuizRepository;
-import com.gafarov.bastion.repository.UserRepository;
 import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,10 +56,10 @@ public class QuizServiceImpl implements QuizService {
             }
             List<Result> results = userResultService.saveResult(result, maxResult, user, quiz);
             if (quizId == 1) {
-                userService.updateActivity(user,Activity.WAITING_INTERVIEW);
+                userService.updateActivity(user, Activity.WAITING_INTERVIEW);
             }
             if (quizId == 2) {
-                userService.updateActivity(user,Activity.WAITING_RESULT);
+                userService.updateActivity(user, Activity.WAITING_RESULT);
             }
             return results.stream().map(ResultMapper.INSTANCE::mapResultToResultDto).toList();
         } else throw new ForbiddenException("u cant send test");

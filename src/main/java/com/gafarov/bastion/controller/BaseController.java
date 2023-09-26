@@ -35,6 +35,7 @@ public class BaseController {
     void handleForbidden(HttpServletResponse response, ForbiddenException exception) throws IOException {
         sendResponse(response, HttpServletResponse.SC_FORBIDDEN, exception.getMessage());
     }
+
     @ExceptionHandler(BadRequestException.class)
     void handleBadRequest(HttpServletResponse response, BadRequestException exception) throws IOException {
         sendResponse(response, HttpServletResponse.SC_BAD_REQUEST, exception.getMessage());

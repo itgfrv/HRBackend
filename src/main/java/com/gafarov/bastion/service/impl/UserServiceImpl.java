@@ -38,14 +38,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow();
         return user;
     }
-    public void changeUserStatus(Integer userId, UserStatus userStatus){
+
+    public void changeUserStatus(Integer userId, UserStatus userStatus) {
         Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()) throw new BadRequestException("нет дурика");
+        if (user.isEmpty()) throw new BadRequestException("нет дурика");
         User u = user.get();
         u.setUserStatus(userStatus);
         userRepository.save(u);
     }
-    public void updateActivity(User user, Activity activity){
+
+    public void updateActivity(User user, Activity activity) {
         user.setActivity(activity);
         userRepository.save(user);
     }

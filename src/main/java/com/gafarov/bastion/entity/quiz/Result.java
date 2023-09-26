@@ -1,6 +1,6 @@
-package com.gafarov.bastion.entity;
+package com.gafarov.bastion.entity.quiz;
 
-import com.gafarov.bastion.entity.quiz.QuestionType;
+import com.gafarov.bastion.entity.UserResult;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class Result {
 
     private Integer result;
     @ManyToOne
-    @JoinColumn(name="user_result_id")
+    @JoinColumn(name = "user_result_id")
     private UserResult userResult;
 }

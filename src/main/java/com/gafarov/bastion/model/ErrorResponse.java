@@ -45,11 +45,10 @@ public class ErrorResponse {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class Error {\n");
-        sb.append("    error: ").append(toIndentedString(error)).append("\n");
-        sb.append("}");
-        return sb.toString();
+        String sb = "class Error {\n" +
+                    "    error: " + toIndentedString(error) + "\n" +
+                    "}";
+        return sb;
     }
 
     private String toIndentedString(Object o) {

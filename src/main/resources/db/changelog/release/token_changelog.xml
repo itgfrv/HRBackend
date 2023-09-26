@@ -8,7 +8,7 @@
         <sql>
             CREATE TABLE token
             (
-                id      SERIAL  PRIMARY KEY,
+                id      SERIAL PRIMARY KEY,
                 token   VARCHAR(255) NOT NULL,
                 type    VARCHAR(255),
                 expired BOOLEAN,

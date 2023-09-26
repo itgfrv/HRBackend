@@ -6,7 +6,6 @@ import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.exception.BadRequestException;
 import com.gafarov.bastion.model.FormDto;
 import com.gafarov.bastion.model.FullFormDto;
-import com.gafarov.bastion.model.PersonalInfo;
 import com.gafarov.bastion.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

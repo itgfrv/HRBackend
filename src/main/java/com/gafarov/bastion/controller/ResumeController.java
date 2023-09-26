@@ -42,5 +42,8 @@ public class ResumeController extends BaseController {
         }
         return service.updateResume(resumeDto, user);
     }
-
+   /* @GetMapping("/questions")
+    public List<ResumeQuestionDto> getResumeQuestions(){
+        return null;
+    }*/
 }

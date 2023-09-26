@@ -23,6 +23,7 @@ import java.util.List;
 @CrossOrigin
 public class FormController {
     private final FormServiceImpl formService;
+
     @GetMapping
     public List<FormDto> getUsersForm(
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
@@ -41,8 +42,8 @@ public class FormController {
         return formService.getUserInfo(id);
     }
 
-    @GetMapping ("/personal")
-    public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user){
-        return new PersonalInfo(user.getId(),user.getEmail(),user.getFirstname(),user.getLastname(),user.getRole(),user.getUserStatus(),user.getActivity());
+    @GetMapping("/personal")
+    public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user) {
+        return new PersonalInfo(user.getId(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getRole(), user.getUserStatus(), user.getActivity());
     }
 }

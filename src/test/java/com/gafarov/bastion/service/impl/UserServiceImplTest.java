@@ -13,8 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -146,6 +144,6 @@ class UserServiceImplTest {
 
         when(userRepository.findByEmail(any(String.class))).thenReturn(optionalUser);
 
-        assertEquals(expectedUser,userService.findUserByEmail("pushkin@mail.ru"));
+        assertEquals(expectedUser, userService.findUserByEmail("pushkin@mail.ru"));
     }
 }

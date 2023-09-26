@@ -2,7 +2,7 @@ package com.gafarov.bastion.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record ResumeDto (
+public record ResumeDto(
         @JsonProperty("phone_number")
         String phoneNumber,
         String email,
@@ -24,5 +24,5 @@ public record ResumeDto (
         String busyness,
         @JsonProperty("resume_src")
         String resumeSrc
-){
+) {
 }
