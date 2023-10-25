@@ -1,45 +1,54 @@
 package com.gafarov.bastion.service.impl;
 
-import com.gafarov.bastion.entity.Resume;
-import com.gafarov.bastion.entity.user.Activity;
+import com.gafarov.bastion.entity.resume.ResumeAnswer;
+import com.gafarov.bastion.entity.resume.ResumeQuestion;
 import com.gafarov.bastion.entity.user.User;
-import com.gafarov.bastion.mapper.ResumeMapper;
+import com.gafarov.bastion.model.ResumeAnswerDto;
 import com.gafarov.bastion.model.ResumeDto;
-import com.gafarov.bastion.repository.ResumeRepository;
+import com.gafarov.bastion.model.ResumeQuestionDto;
+import com.gafarov.bastion.repository.ResumeAnswerRepository;
+import com.gafarov.bastion.repository.ResumeQuestionRepository;
 import com.gafarov.bastion.repository.UserRepository;
+import com.gafarov.bastion.service.ResumeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ResumeServiceImpl {
-    private final ResumeRepository repository;
+public class ResumeServiceImpl implements ResumeService {
+    private final ResumeQuestionRepository questionRepository;
+    private final ResumeAnswerRepository answerRepository;
     private final UserRepository userRepository;
 
-    public ResumeDto getResume(int userId) {
-        Optional<Resume> resume = repository.findByUserId(userId);
-        if (resume.isPresent()) {
-            return ResumeMapper.INSTANCE.mapResumeToResumeDto(resume.get());
+    public ResumeDto getResume(User user) {
+        List<ResumeQuestion> questions = questionRepository.findAll();
+        List<ResumeQuestionDto> dto = questions.stream()
+                .map(q -> new ResumeQuestionDto(q.getId(), q.getQuestion()))
+                .toList();
+        List<ResumeAnswer> answers = answerRepository.findAllByUserId(user.getId());
+        List<ResumeAnswerDto> answerDtos = answers.stream()
+                .map(a -> new ResumeAnswerDto(a.getQuestion().getId(), a.getAnswer()))
+                .toList();
+        return new ResumeDto(dto, answerDtos);
+    }
+
+    public ResumeDto updateResume(User user, List<ResumeAnswerDto> answers) {
+        for (var ans : answers) {
+            var resumeAnswer = answerRepository
+                    .findByUserIdAndQuestionId(user.getId(), ans.getQuestionId())
+                    .orElseGet(ResumeAnswer::new);
+            resumeAnswer.setAnswer(ans.getAnswer());
+            resumeAnswer.setUser(user);
+            resumeAnswer.setQuestion(questionRepository.findById(ans.getQuestionId()).orElseThrow());
+            answerRepository.save(resumeAnswer);
         }
-        return new ResumeDto("", "", "", "", "", "", "", "", "", "", "", "");
+        return getResume(user);
     }
 
-    public ResumeDto sendResume(ResumeDto resumeDto, User user) {
-        var dto = updateResume(resumeDto, user);
-
-        user.setActivity(Activity.RESUME);
-        userRepository.save(user);
-
-        return dto;
-    }
-
-    public ResumeDto updateResume(ResumeDto resumeDto, User user) {
-        Resume r = ResumeMapper.INSTANCE.mapResumeDtoToResume(resumeDto);
-        r.setUser(user);
-        r.setId(user.getId());
-        var savedResume = repository.save(r);
-        return ResumeMapper.INSTANCE.mapResumeToResumeDto(savedResume);
+    public ResumeDto sendResume(User user, List<ResumeAnswerDto> answers) {
+        updateResume(user, answers);
+        return getResume(user);
     }
 }

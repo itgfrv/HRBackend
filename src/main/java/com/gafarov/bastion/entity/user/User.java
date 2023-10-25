@@ -1,6 +1,5 @@
 package com.gafarov.bastion.entity.user;
 
-import com.gafarov.bastion.entity.token.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -42,8 +41,7 @@ public class User implements UserDetails {
     private UserStatus userStatus;
     @Enumerated(EnumType.STRING)
     private Activity activity;
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,27 +2,12 @@ package com.gafarov.bastion.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public record ResumeDto(
-        @JsonProperty("phone_number")
-        String phoneNumber,
-        String email,
-        @JsonProperty("military_duty")
-        String militaryDuty,
-        String education,
-        @JsonProperty("metro_station")
-        String metroStation,
-        @JsonProperty("good_qualities")
-        String goodQualities,
-        @JsonProperty("bad_qualities")
-        String badQualities,
-        @JsonProperty("bad_habits")
-        String badHabits,
-        @JsonProperty("reasons_for_working")
-        String reasonsForWorking,
-        @JsonProperty("good_job_qualities")
-        String goodJobQualities,
-        String busyness,
-        @JsonProperty("resume_src")
-        String resumeSrc
+        @JsonProperty("questions")
+        List<ResumeQuestionDto> resumeQuestionDtoList,
+        @JsonProperty("answers")
+        List<ResumeAnswerDto> resumeAnswerDtoList
 ) {
 }

@@ -1,13 +1,15 @@
 package com.gafarov.bastion.controller;
 
-import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
-import com.gafarov.bastion.exception.ForbiddenException;
+import com.gafarov.bastion.model.ResumeAnswerDto;
 import com.gafarov.bastion.model.ResumeDto;
+import com.gafarov.bastion.service.ResumeService;
 import com.gafarov.bastion.service.impl.ResumeServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/resume")
@@ -16,34 +18,20 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeController extends BaseController {
     private final ResumeServiceImpl service;
 
-    @GetMapping
-    public ResumeDto getPersonalResume(@AuthenticationPrincipal User user) {
-        return service.getResume(user.getId());
+    @GetMapping("/questions")
+    public ResumeDto getResumeQuestions(@AuthenticationPrincipal User user) {
+        return service.getResume(user);
     }
 
-    @PostMapping
-    public ResumeDto sendResume(
-            @AuthenticationPrincipal User user,
-            @RequestBody ResumeDto resumeDto
+    @PutMapping("/update")
+    public ResumeDto updateResume(@AuthenticationPrincipal User user,
+                                        @RequestBody List<ResumeAnswerDto> answers
     ) {
-        if (user.getActivity() != Activity.REGISTERED) {
-            throw new ForbiddenException("cant save already saved resume");
-        }
-        return service.sendResume(resumeDto, user);
+        return service.updateResume(user,answers);
     }
 
-    @PutMapping
-    public ResumeDto updateResume(
-            @AuthenticationPrincipal User user,
-            @RequestBody ResumeDto resumeDto
-    ) {
-        if (user.getActivity() != Activity.REGISTERED) {
-            throw new ForbiddenException("Cant change saved resume");
-        }
-        return service.updateResume(resumeDto, user);
+    @PostMapping("/send")
+    public ResumeDto sendResume(@AuthenticationPrincipal User user,@RequestBody List<ResumeAnswerDto> answers) {
+        return service.sendResume(user, answers);
     }
-   /* @GetMapping("/questions")
-    public List<ResumeQuestionDto> getResumeQuestions(){
-        return null;
-    }*/
 }
