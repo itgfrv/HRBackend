@@ -104,6 +104,7 @@ public class ResumeServiceImpl implements ResumeService {
             ra.setQuestion(questionRepository.getReferenceById(i));
             ra.setAnswer(text);
             ra.setUser(user);
+            answerRepository.save(ra);
         }
         return getOld(user);
     }
