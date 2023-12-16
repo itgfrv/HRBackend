@@ -1,9 +1,9 @@
 package com.gafarov.bastion.controller;
 
 import com.gafarov.bastion.entity.user.User;
-import com.gafarov.bastion.model.QuizAnswer;
-import com.gafarov.bastion.model.QuizDto;
-import com.gafarov.bastion.model.ResultDto;
+import com.gafarov.bastion.model.quiz.QuizAnswer;
+import com.gafarov.bastion.model.quiz.QuizDto;
+import com.gafarov.bastion.model.quiz.ResultDto;
 import com.gafarov.bastion.service.impl.QuizServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

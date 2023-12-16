@@ -1,0 +1,5 @@
+id,task_type,description,course_id,task_id,is_open_on_start
+1,RESUME,Анкета,1,null,true
+2,QUIZ,Демо-тест инженер проектировщик,1,1,true
+3,QUIZ,Интервью-тест инженер проектировщик,1,2,false
+4,HW,Домашнее задание,1,null,false

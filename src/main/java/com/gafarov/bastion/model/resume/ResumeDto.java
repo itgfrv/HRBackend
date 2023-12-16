@@ -1,4 +1,4 @@
-package com.gafarov.bastion.model;
+package com.gafarov.bastion.model.resume;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package com.gafarov.bastion.model;
+package com.gafarov.bastion.model.course;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResumeAnswerDto {
-    @JsonProperty("question_id")
-    private int questionId;
-    @JsonProperty("answer_body")
-    private String answer;
+public class UserTaskDto {
+    private TaskDto task;
+    @JsonProperty("is_opened")
+    private boolean isOpened;
 }

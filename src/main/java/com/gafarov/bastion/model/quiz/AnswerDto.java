@@ -1,4 +1,4 @@
-package com.gafarov.bastion.model;
+package com.gafarov.bastion.model.quiz;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

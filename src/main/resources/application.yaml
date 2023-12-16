@@ -22,3 +22,9 @@ springdoc:
 server:
   servlet:
     context-path: /api/v1
+amazon:
+  access-key: ${ACCESS_KEY}
+  secret-key: ${SECRET_KEY}
+  bucket-name: ${BUCKET_NAME}
+  endpoint-url: s3.timeweb.com
+  region: ru-1

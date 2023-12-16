@@ -1,6 +1,8 @@
 package com.gafarov.bastion.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gafarov.bastion.model.quiz.QuizResultDto;
+import com.gafarov.bastion.model.resume.ResumeDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

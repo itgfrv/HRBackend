@@ -1,7 +1,8 @@
-package com.gafarov.bastion.model;
+package com.gafarov.bastion.model.quiz;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gafarov.bastion.entity.quiz.QuizType;
+import com.gafarov.bastion.model.quiz.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

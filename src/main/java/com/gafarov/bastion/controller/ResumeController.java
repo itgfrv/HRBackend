@@ -1,8 +1,8 @@
 package com.gafarov.bastion.controller;
 
 import com.gafarov.bastion.entity.user.User;
-import com.gafarov.bastion.model.ResumeAnswerDto;
-import com.gafarov.bastion.model.ResumeDto;
+import com.gafarov.bastion.model.resume.ResumeAnswerDto;
+import com.gafarov.bastion.model.resume.ResumeDto;
 import com.gafarov.bastion.service.impl.ResumeServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
