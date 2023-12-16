@@ -33,10 +33,6 @@ public class HWTaskController {
         });
     }
 
-    @GetMapping()
-    public MultipartFile getFiles(@AuthenticationPrincipal User user) {
-        return null;
-    }
 
     private void saveToS3(final InputStream inputStream, final String originalImagePath) throws IOException {
         final ObjectMetadata md = new ObjectMetadata();

@@ -71,7 +71,6 @@ public class ResumeServiceImpl implements ResumeService {
                 case 14 -> resumeDto.setGoodJobQualities(ra.getAnswer());
                 case 16 -> resumeDto.setBusyness(ra.getAnswer());
                 case 15 -> resumeDto.setResumeSrc(ra.getAnswer());
-
             }
         }
         return resumeDto;
