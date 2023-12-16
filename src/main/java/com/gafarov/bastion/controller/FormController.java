@@ -38,6 +38,7 @@ public class FormController {
 
     @GetMapping("/{id}")
     public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
+        System.out.println("QQQQQQQQQQQQWKJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJEWW");
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
     }
