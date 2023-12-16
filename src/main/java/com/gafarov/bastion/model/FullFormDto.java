@@ -1,6 +1,7 @@
 package com.gafarov.bastion.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gafarov.bastion.controller.OldResumeDto;
 import com.gafarov.bastion.model.quiz.QuizResultDto;
 import com.gafarov.bastion.model.resume.ResumeDto;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class FullFormDto {
     @JsonProperty("user_info")
     private FormDto user;
     @JsonProperty("resume")
-    private ResumeDto resumeDto;
+    private OldResumeDto resumeDto;
     @JsonProperty("quiz_result")
     private List<QuizResultDto> quizResult;
 }

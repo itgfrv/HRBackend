@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hw")
+@CrossOrigin
 public class HWTaskController {
     private final AmazonClient amazon;
 

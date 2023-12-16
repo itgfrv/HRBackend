@@ -25,6 +25,6 @@ server:
 amazon:
   access-key: ${ACCESS_KEY}
   secret-key: ${SECRET_KEY}
-  bucket-name: ${BUCKET_NAME}
+  bucket-name: ${BUCKET_NAME:48743bfe-bastion}
   endpoint-url: s3.timeweb.com
   region: ru-1
