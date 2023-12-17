@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/form")
 @AllArgsConstructor
+@CrossOrigin
 public class FormController extends BaseController {
     private final FormServiceImpl formService;
 

@@ -7,12 +7,13 @@ import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
+@CrossOrigin
 public class BaseController {
     @ExceptionHandler(ConflictDataException.class)
     void handleConflictData(HttpServletResponse response, Exception exception) throws IOException {

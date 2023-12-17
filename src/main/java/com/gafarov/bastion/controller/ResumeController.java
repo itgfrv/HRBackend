@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/resume")
 @AllArgsConstructor
+@CrossOrigin
 public class ResumeController extends BaseController {
     private final ResumeServiceImpl service;
 

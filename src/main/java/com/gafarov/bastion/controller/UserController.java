@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
+@CrossOrigin
 public class UserController extends BaseController {
     private final UserServiceImpl userService;
 

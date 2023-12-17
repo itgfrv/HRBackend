@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 @AllArgsConstructor
+@CrossOrigin
 public class QuizController extends BaseController {
     private final QuizServiceImpl quizService;
 
