@@ -1,10 +1,7 @@
 package com.gafarov.bastion.service.impl;
 
 import com.gafarov.bastion.entity.UserResult;
-import com.gafarov.bastion.entity.quiz.Answer;
-import com.gafarov.bastion.entity.quiz.Question;
-import com.gafarov.bastion.entity.quiz.QuestionType;
-import com.gafarov.bastion.entity.quiz.Quiz;
+import com.gafarov.bastion.entity.quiz.*;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.mapper.QuizMapper;
 import com.gafarov.bastion.mapper.ResultMapper;
@@ -13,6 +10,7 @@ import com.gafarov.bastion.model.quiz.QuizDto;
 import com.gafarov.bastion.model.quiz.QuizResultDto;
 import com.gafarov.bastion.model.quiz.ResultDto;
 import com.gafarov.bastion.repository.QuizRepository;
+import com.gafarov.bastion.repository.ResultRepository;
 import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +26,7 @@ import java.util.stream.Collectors;
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
     private final UserResultServiceImpl userResultService;
+    private final ResultRepository repository;
     private final UserServiceImpl userService;
 
     public QuizDto getQuiz(Integer quizId, User user) {
@@ -62,7 +61,12 @@ public class QuizServiceImpl implements QuizService {
         for (var userResult : userResults) {
             if (userResult.getEndTime() != null) {
                 QuizResultDto res = new QuizResultDto();
-                res.setResult(userResult.getResults().stream().map(ResultMapper.INSTANCE::mapResultToResultDto).collect(Collectors.toList()));
+                System.out.println("11 11 11 11 11 11 11 11 11 11 11 11");
+                List<Result> results = repository.findAllByUserResultId(userResult.getId());
+                res.setResult(results
+                        .stream()
+                        .map(ResultMapper.INSTANCE::mapResultToResultDto).collect(Collectors.toList()));
+                System.out.println("22 22 22 22 22 22 22 22 22 22 22 22");
                 res.setType(userResult.getQuiz().getQuizType());
                 Long duration = userResult.getEndTime().toInstant().toEpochMilli() - userResult.getStartTime().toInstant().toEpochMilli();
                 res.setDuration(duration);
