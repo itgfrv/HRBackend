@@ -20,8 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/form")
 @AllArgsConstructor
-@CrossOrigin
-public class FormController {
+public class FormController extends BaseController {
     private final FormServiceImpl formService;
 
     @GetMapping
@@ -38,7 +37,6 @@ public class FormController {
 
     @GetMapping("/{id}")
     public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
-        System.out.println("QQQQQQQQQQQQWKJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJEWW");
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
     }

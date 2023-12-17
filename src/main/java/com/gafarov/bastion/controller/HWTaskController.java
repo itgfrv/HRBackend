@@ -1,9 +1,7 @@
 package com.gafarov.bastion.controller;
 
 import com.amazonaws.services.s3.model.*;
-import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.service.AmazonClient;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
