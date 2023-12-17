@@ -2,6 +2,7 @@ package com.gafarov.bastion.controller;
 
 import com.amazonaws.services.s3.model.*;
 import com.gafarov.bastion.service.AmazonClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,7 @@ public class HWTaskController extends BaseController{
         this.amazon = amazon;
     }
 
-    @PostMapping("/load")
+    @PostMapping(value = "/load", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void loadFiles(@RequestBody List<MultipartFile> files) {
         files.forEach(multipartFile -> {
             try {
