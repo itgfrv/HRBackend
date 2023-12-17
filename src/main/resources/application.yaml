@@ -10,6 +10,9 @@ spring:
   jpa:
     show-sql: true
     database: postgresql
+  servlet:
+    multipart:
+      max-file-size: 10MB
 application:
   security:
     jwt:
