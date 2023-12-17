@@ -37,7 +37,7 @@ public class FormController extends BaseController {
 
     @GetMapping("/{id}")
     public FullFormDto getUserForm(@AuthenticationPrincipal User user, @PathVariable Integer id) {
-        if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
+        //if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return formService.getUserInfo(id);
     }
 
