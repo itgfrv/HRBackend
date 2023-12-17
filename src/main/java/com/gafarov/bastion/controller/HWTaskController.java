@@ -9,12 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/hw")
 @CrossOrigin
-public class HWTaskController extends BaseController{
+public class HWTaskController extends BaseController {
     private final AmazonClient amazon;
 
     public HWTaskController(AmazonClient amazon) {
@@ -22,14 +22,15 @@ public class HWTaskController extends BaseController{
     }
 
     @PostMapping(value = "/load", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void loadFiles(@RequestBody List<MultipartFile> files) {
-        files.forEach(multipartFile -> {
-            try {
-                this.saveToS3(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    public void loadFiles(@RequestBody MultipartFile[] files) {
+        Arrays.stream(files)
+                .forEach(multipartFile -> {
+                    try {
+                        this.saveToS3(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
 
