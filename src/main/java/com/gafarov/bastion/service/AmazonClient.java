@@ -26,7 +26,11 @@ public class AmazonClient {
                                 "ru-1"
                         )
                 )
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.getAccessKeyId(), this.getSecretAccessKey())))
+                .withCredentials(
+                        new AWSStaticCredentialsProvider(
+                                new BasicAWSCredentials(
+                                        this.getAccessKeyId(),
+                                        this.getSecretAccessKey())))
                 .build();
     }
 

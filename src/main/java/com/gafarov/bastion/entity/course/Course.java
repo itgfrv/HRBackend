@@ -20,6 +20,6 @@ public class Course {
     private String name;
     private String description;
     private Boolean isOpened;
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private List<Task> tasks;
 }
