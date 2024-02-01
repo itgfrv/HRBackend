@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-@CrossOrigin
+
 public class BaseController {
     @ExceptionHandler(ConflictDataException.class)
     void handleConflictData(HttpServletResponse response, Exception exception) throws IOException {

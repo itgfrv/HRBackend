@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/hw")
-@CrossOrigin
+
 @AllArgsConstructor
 public class HWTaskController extends BaseController {
 
