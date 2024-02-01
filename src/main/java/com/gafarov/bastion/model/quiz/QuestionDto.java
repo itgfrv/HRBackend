@@ -20,6 +20,6 @@ public class QuestionDto {
     private String question;
     @JsonProperty("question_type")
 
-    private QuestionType questionType;
+    private String questionType;
     private List<AnswerDto> answers;
 }

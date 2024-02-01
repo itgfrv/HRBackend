@@ -39,8 +39,8 @@ public class UserResultServiceImpl implements UserResultService {
     }
 
     public List<Result> saveResult(
-            Map<QuestionType, Integer> result,
-            Map<QuestionType, Integer> maxResult,
+            Map<String, Integer> result,
+            Map<String, Integer> maxResult,
             User user,
             Quiz quiz
     ) {

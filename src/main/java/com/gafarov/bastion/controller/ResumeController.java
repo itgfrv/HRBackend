@@ -36,32 +36,5 @@ public class ResumeController extends BaseController {
         return service.sendResume(user, answers);
     }
 
-    @GetMapping
-    @Operation(
-            summary = "Deprecated",
-            description = "Старая версия получения анкеты, будет удалена"
-    )
-    public OldResumeDto getResume(@AuthenticationPrincipal User user) {
-
-        return service.getOld(user);
-    }
-
-    @PostMapping
-    @Operation(
-            summary = "Deprecated",
-            description = "Старая версия отправки анкеты, будет удалена"
-    )
-    public OldResumeDto postResume(@AuthenticationPrincipal User user, @RequestBody OldResumeDto resumeDto) {
-        return service.postOld(user, resumeDto);
-    }
-
-    @PutMapping
-    @Operation(
-            summary = "Deprecated",
-            description = "Старая версия обновления анкеты, будет удалена"
-    )
-    public OldResumeDto putResume(@AuthenticationPrincipal User user, @RequestBody OldResumeDto resumeDto) {
-        return service.putOld(user, resumeDto);
-    }
 
 }

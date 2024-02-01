@@ -1,5 +1,6 @@
 package com.gafarov.bastion.controller;
 
+import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.entity.user.UserStatus;
@@ -19,10 +20,9 @@ public class UserController extends BaseController {
     @PutMapping("/{id}")
     public void changeUserStatus(
             @PathVariable Integer id,
-            @RequestBody UserStatus status,
             @AuthenticationPrincipal User user
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
-        userService.changeUserStatus(id, status);
+        userService.changeUserStatus(id, Activity.INTERVIEW);
     }
 }

@@ -33,7 +33,7 @@
     </changeSet>
     <changeSet id="2" author="gafarov">
         <loadData file="db/changelog/data/quiz.csv" tableName="quiz"/>
-        <loadData file="db/changelog/data/question.csv" tableName="question"/>
+        <loadData file="db/changelog/data/question.csv" tableName="question" separator=";"/>
         <loadData file="db/changelog/data/answer.csv" tableName="answer"/>
     </changeSet>
 

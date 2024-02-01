@@ -19,9 +19,9 @@ public class Question {
     private String imgSrc;
     @Column(length = 1000)
     private String question;
-    @Enumerated(EnumType.STRING)
+
     @Column(name = "question_type")
-    private QuestionType questionType;
+    private String questionType;
     @ManyToOne
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;

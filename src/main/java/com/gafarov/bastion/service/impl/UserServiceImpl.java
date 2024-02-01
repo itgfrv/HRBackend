@@ -39,11 +39,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public void changeUserStatus(Integer userId, UserStatus userStatus) {
+    public void changeUserStatus(Integer userId, Activity userStatus) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) throw new BadRequestException("нет дурика");
         User u = user.get();
-        u.setUserStatus(userStatus);
+        u.setActivity(userStatus);
         userRepository.save(u);
     }
 

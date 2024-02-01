@@ -15,9 +15,8 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "result_seq")
     @SequenceGenerator(name = "result_seq", sequenceName = "result_id_seq", allocationSize = 1)
     private Integer id;
-    @Enumerated(EnumType.STRING)
     @Column(name = "question_type")
-    private QuestionType questionType;
+    private String questionType;
     @Column(name = "max_result")
     private Integer maxResult;
 

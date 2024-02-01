@@ -2,40 +2,142 @@ id,answer,is_correct,question_id
 1,В направлении стрелки А,false,1
 2,В направлении стрелки В,true,1
 3,Не знаю,false,1
-4,Гусеница А,false,2
-5,Гусеница B,true,2
-6,Не знаю,false,2
-7,В направлении А,true,3
-8,В обоих направлениях,false,3
-9,В направлении В,false,3
-10,Достаточно цепи А,false,4
-11,Достаточно цепи B,true,4
-12,Нужны обе цепи,false,4
-13,Ось А,true,5
-14,Ось B,false,5
-15,Ось С,false,5
-16,A,false,6
-17,B,true,6
-18,C,false,6
-19,D,false,6
-20,E,false,6
-21,A,false,7
-22,B,true,7
-23,С,false,7
-24,D,false,7
-25,E,false,7
-26,A,false,8
-27,B,false,8
-28,С,false,8
-29,D,true,8
-30,E,false,8
-31,A,false,9
-32,B,false,9
-33,С,false,9
-34,D,true,9
-35,E,false,9
-36,A,false,10
-37,B,false,10
-38,С,false,10
-39,D,true,10
-40,E,false,10
+4,Достаточно цепи А,false,2
+5,Достаточно цепи B,true,2
+6,Нужны обе цепи,false,2
+7,A,false,3
+8,B,true,3
+9,C,false,3
+10,D,false,3
+11,E,false,3
+12,A,false,4
+13,B,false,4
+14,C,false,4
+15,D,false,4
+16,E,true,4
+17,A,false,5
+18,B,false,5
+19,C,false,5
+20,D,true,5
+21,E,false,5
+22,A,false,6
+23,B,false,6
+24,C,true,6
+25,D,false,6
+26,E,false,6
+27,45 гектаров,false,7
+28,55 гектаров,false,7
+29,50 гектаров,true,7
+30,40 гектаров,false,7
+31,10%,true,8
+32,9.5%,false,8
+33,11%,false,8
+34,10.5%,false,8
+35,Ответ 1,false,9
+36,Ответ 2,false,9
+37,Ответ 3,true,9
+38,Ответ 4,false,9
+39,Ответ 1,false,10
+40,Ответ 2,false,10
+41,Ответ 3,false,10
+42,Ответ 4,true,10
+43,В направлении А,true,11
+44,В обоих направлениях,false,11
+45,В направлении В,false,11
+46,Гусеница А,false,12
+47,Гусеница В,true,12
+48,Не знаю,false,12
+49,Ось А,true,13
+50,Ось В,false,13
+51,Ось С,false,13
+52,Цепь А,false,14
+53,Цель В,true,14
+54,Цепь С,false,14
+55,Как показано на рисунке А,false,15
+56,Как показано на рисунке В,false,15
+57,Как показано на рисунке С,true,15
+58,A,false,16
+59,B,false,16
+60,C,false,16
+61,D,false,16
+62,E,true,16
+63,A,false,17
+64,B,false,17
+65,C,false,17
+66,D,false,17
+67,E,true,17
+68,A,false,18
+69,B,true,18
+70,C,false,18
+71,D,false,18
+72,E,false,18
+73,A,false,19
+74,B,false,19
+75,C,true,19
+76,D,false,19
+77,E,false,19
+78,A,false,20
+79,B,false,20
+80,C,false,20
+81,D,true,20
+82,E,false,20
+83,A,false,21
+84,B,false,21
+85,C,true,21
+86,D,false,21
+87,E,false,21
+88,A,false,22
+89,B,true,22
+90,C,false,22
+91,D,false,22
+92,E,false,22
+93,A,false,23
+94,B,false,23
+95,C,false,23
+96,D,true,23
+97,E,false,23
+98,A,true,24
+99,B,false,24
+100,C,false,24
+101,D,false,24
+102,E,false,24
+103,A,false,25
+104,B,false,25
+105,C,false,25
+106,D,true,25
+107,E,false,25
+108,70,true,26
+109,66,false,26
+110,80,false,26
+111,16,false,27
+112,15,true,27
+113,17,false,27
+114,5,true,28
+115,7,false,28
+116,11,false,28
+117,195,false,29
+118,180,false,29
+119,190,true,29
+120,600,true,30
+121,500,false,30
+122,700,false,30
+123,Ответ 1,false,31
+124,Ответ 2,false,31
+125,Ответ 3,true,31
+126,Ответ 4,false,31
+127,Ответ 1,true,32
+128,Ответ 2,false,32
+129,Ответ 3,false,32
+130,Ответ 4,false,32
+131,Ответ 1,false,33
+132,Ответ 2,false,33
+133,Ответ 3,true,33
+134,Ответ 4,false,33
+135,Ответ 1,false,34
+136,Ответ 2,true,34
+137,Ответ 3,false,34
+138,Ответ 4,false,34
+139,Ответ 1,true,35
+140,Ответ 2,false,35
+141,Ответ 3,false,35
+142,Ответ 4,false,35

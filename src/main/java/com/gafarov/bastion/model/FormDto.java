@@ -14,5 +14,5 @@ public class FormDto {
     private String firstname;
     private String lastname;
     private UserStatus status;
-    private Activity activity;
+    private String activity;
 }

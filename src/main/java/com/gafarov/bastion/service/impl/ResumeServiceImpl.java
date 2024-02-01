@@ -3,6 +3,7 @@ package com.gafarov.bastion.service.impl;
 import com.gafarov.bastion.controller.OldResumeDto;
 import com.gafarov.bastion.entity.resume.ResumeAnswer;
 import com.gafarov.bastion.entity.resume.ResumeQuestion;
+import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.model.resume.ResumeAnswerDto;
 import com.gafarov.bastion.model.resume.ResumeDto;
@@ -50,61 +51,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     public ResumeDto sendResume(User user, List<ResumeAnswerDto> answers) {
         updateResume(user, answers);
+        user.setActivity(Activity.RESUME);
+        userRepository.save(user);
         return getResume(user);
     }
 
-    public OldResumeDto getOld(User user) {
-        List<ResumeAnswer> answers = answerRepository.findAllByUserId(user.getId());
-        OldResumeDto resumeDto = new OldResumeDto();
-        for (ResumeAnswer ra : answers) {
-            Integer id = ra.getQuestion().getId();
-            switch (id) {
-                case 1 -> resumeDto.setPhoneNumber(ra.getAnswer());
-                case 2 -> resumeDto.setEmail(ra.getAnswer());
-                case 4 -> resumeDto.setMilitaryDuty(ra.getAnswer());
-                case 5 -> resumeDto.setEducation(ra.getAnswer());
-                case 6 -> resumeDto.setMetroStation(ra.getAnswer());
-                case 10 -> resumeDto.setGoodQualities(ra.getAnswer());
-                case 11 -> resumeDto.setBadQualities(ra.getAnswer());
-                case 12 -> resumeDto.setBadHabits(ra.getAnswer());
-                case 13 -> resumeDto.setReasonsForWorking(ra.getAnswer());
-                case 14 -> resumeDto.setGoodJobQualities(ra.getAnswer());
-                case 16 -> resumeDto.setBusyness(ra.getAnswer());
-                case 15 -> resumeDto.setResumeSrc(ra.getAnswer());
-            }
-        }
-        return resumeDto;
-    }
-    public OldResumeDto postOld(User user, OldResumeDto resumeDto){
-        putOld(user,resumeDto);
-        return getOld(user);
-    }
-    public OldResumeDto putOld(User user, OldResumeDto resumeDto){
-        for(int i = 1;i<17;i++){
-            var ra = answerRepository
-                    .findByUserIdAndQuestionId(user.getId(), i)
-                    .orElseGet(ResumeAnswer::new);
-            String text;
-            switch (i) {
-                case 1 -> text=resumeDto.getPhoneNumber();
-                case 2 -> text=resumeDto.getEmail();
-                case 4 -> text=resumeDto.getMilitaryDuty();
-                case 5 -> text=resumeDto.getEducation();
-                case 6 -> text=resumeDto.getMetroStation();
-                case 10 -> text=resumeDto.getGoodQualities();
-                case 11 -> text=resumeDto.getBadQualities();
-                case 12 -> text=resumeDto.getBadHabits();
-                case 13 -> text=resumeDto.getReasonsForWorking();
-                case 14 -> text=resumeDto.getGoodJobQualities();
-                case 16 -> text=resumeDto.getBusyness();
-                case 15 -> text=resumeDto.getResumeSrc();
-                default -> text="";
-            }
-            ra.setQuestion(questionRepository.getReferenceById(i));
-            ra.setAnswer(text);
-            ra.setUser(user);
-            answerRepository.save(ra);
-        }
-        return getOld(user);
-    }
 }

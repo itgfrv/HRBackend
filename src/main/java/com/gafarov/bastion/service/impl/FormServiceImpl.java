@@ -31,7 +31,23 @@ public class FormServiceImpl {
     }
 
     private FormDto mapUserToForm(User user) {
-        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), user.getActivity());
+        String activity = "";
+        switch (user.getActivity()){
+            case REGISTERED:
+                activity+="Зарегистрировался";
+                break;
+            case RESUME:
+                activity+="Заполнил резюме/";
+            case DEMO_TEST:
+                activity+="Заполнил резюме/Выполнил демо тест/";
+            case WAITING_INTERVIEW:
+                activity+="Заполнил резюме/Выполнил демо тест/";
+            case INTERVIEW:
+                break;
+            case WAITING_RESULT:
+                activity+="Заполнил резюме/Выполнил демо тест/Выполнил финальный тест/";
+        }
+        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), activity);
     }
 
     public FullFormDto getUserInfo(Integer id) {
@@ -39,7 +55,7 @@ public class FormServiceImpl {
         Optional<User> u = userRepository.findById(id);
         if (u.isEmpty()) throw new BadRequestException("no users with this id");
         fullForm.setUser(mapUserToForm(u.get()));
-        fullForm.setResumeDto(resumeService.getOld(u.get()));
+        fullForm.setResumeDto(resumeService.getResume(u.get()));
         fullForm.setQuizResult(quizService.getUserResult(id));
         return fullForm;
     }
