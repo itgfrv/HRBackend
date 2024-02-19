@@ -6,5 +6,6 @@ public enum Activity {
     DEMO_TEST,
     WAITING_INTERVIEW,
     INTERVIEW,
-    WAITING_RESULT
+    WAITING_RESULT,
+
 }

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class QuizResultDto {
     private QuizType type;
+    private Integer userResult;
     private List<ResultDto> result;
     private Long duration;
 }

@@ -5,6 +5,7 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="1" author="gafarov">
+
         <sql>
             CREATE TABLE quiz
             (
@@ -35,6 +36,16 @@
         <loadData file="db/changelog/data/quiz.csv" tableName="quiz"/>
         <loadData file="db/changelog/data/question.csv" tableName="question" separator=";"/>
         <loadData file="db/changelog/data/answer.csv" tableName="answer"/>
+    </changeSet>
+    <changeSet id="3" author="gafarov">
+        <update tableName="question">
+            <column name="question" value="Какой фигуре соответствует данная развертка?"/>
+            <where>question='Какая развертка у данной фигуры?'</where>
+        </update>
+        <update tableName="question">
+            <column name="question" value="Как будет выглядеть вторая фигура, если к ней применить поворот, как у первой?"/>
+            <where>question='Как будет выглядеть фигура, если к ней применить поворот, как у первой?'</where>
+        </update>
     </changeSet>
 
 </databaseChangeLog>

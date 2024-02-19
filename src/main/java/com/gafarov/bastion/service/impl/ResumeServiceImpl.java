@@ -1,6 +1,6 @@
 package com.gafarov.bastion.service.impl;
 
-import com.gafarov.bastion.controller.OldResumeDto;
+
 import com.gafarov.bastion.entity.resume.ResumeAnswer;
 import com.gafarov.bastion.entity.resume.ResumeQuestion;
 import com.gafarov.bastion.entity.user.Activity;

@@ -53,29 +53,37 @@ public class FormController extends BaseController {
         TaskInfo t = null;
         switch (a) {
             case REGISTERED -> {
-                t = new TaskInfo(true, false, false);
+                t = new TaskInfo(true,false, false, false,false,false);
             }
             case RESUME -> {
-                t = new TaskInfo(false, true, false);
+                t = new TaskInfo(false,true, true,false,false, false);
             }
-            case WAITING_INTERVIEW, WAITING_RESULT -> {
-                t = new TaskInfo(false, false, false);
+            case WAITING_INTERVIEW -> {
+                t = new TaskInfo(false,true, false,true,false, false);
+            }
+            case WAITING_RESULT -> {
+                t = new TaskInfo(false,true, false,true, false,true);
             }
             case INTERVIEW -> {
-                t = new TaskInfo(false, false, true);
+                t = new TaskInfo(false, true,false, true,true, false);
             }
         }
-        System.out.println(t);
         return t;
     }
 
     private record TaskInfo(
             @JsonProperty("resume")
             boolean resume,
+            @JsonProperty("is_resume_done")
+            boolean resumeDone,
             @JsonProperty("demo")
             boolean demoTest,
+            @JsonProperty("is_demo_done")
+            boolean demoDone,
             @JsonProperty("interview")
-            boolean interview
+            boolean interview,
+            @JsonProperty("is_interview_done")
+            boolean interviewDone
     ) {
     }
 }
