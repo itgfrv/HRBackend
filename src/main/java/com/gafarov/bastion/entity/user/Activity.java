@@ -7,5 +7,6 @@ public enum Activity {
     WAITING_INTERVIEW,
     INTERVIEW,
     WAITING_RESULT,
-
+    CASE_STUDY,
+    CASE_DONE
 }

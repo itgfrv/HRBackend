@@ -25,4 +25,13 @@ public class UserController extends BaseController {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         userService.changeUserStatus(id, Activity.INTERVIEW);
     }
+    @PutMapping("/{id}/{role}")
+    public void changeUserRole(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal User user,
+            @PathVariable Role role
+    ) {
+        if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
+        userService.changeUserRole(id, role);
+    }
 }

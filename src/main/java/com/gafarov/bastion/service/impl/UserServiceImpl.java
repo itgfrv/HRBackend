@@ -1,6 +1,7 @@
 package com.gafarov.bastion.service.impl;
 
 import com.gafarov.bastion.entity.user.Activity;
+import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.entity.user.UserStatus;
 import com.gafarov.bastion.exception.BadRequestException;
@@ -41,9 +42,16 @@ public class UserServiceImpl implements UserService {
 
     public void changeUserStatus(Integer userId, Activity userStatus) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) throw new BadRequestException("нет дурика");
+        if (user.isEmpty()) throw new BadRequestException("no user with this id");
         User u = user.get();
         u.setActivity(userStatus);
+        userRepository.save(u);
+    }
+    public void changeUserRole(Integer userId, Role role) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) throw new BadRequestException("no user with this id");
+        User u = user.get();
+        u.setRole(role);
         userRepository.save(u);
     }
 
@@ -51,4 +59,5 @@ public class UserServiceImpl implements UserService {
         user.setActivity(activity);
         userRepository.save(user);
     }
+
 }

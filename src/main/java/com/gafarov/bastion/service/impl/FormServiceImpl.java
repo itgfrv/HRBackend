@@ -22,10 +22,10 @@ public class FormServiceImpl {
     private final ResumeServiceImpl resumeService;
     private final QuizServiceImpl quizService;
 
-    public List<FormDto> getPaginationForm(Pageable pageable, Activity filterParam) {
+    public List<FormDto> getPaginationForm(Pageable pageable, Activity filterParam,Role role) {
         Page<User> page;
-        if (filterParam == null) page = userRepository.findAllByRole(pageable, Role.USER);
-        else page = userRepository.findAllByActivityAndRole(pageable, filterParam, Role.USER);
+        if (filterParam == null) page = userRepository.findAllByRole(pageable, role);
+        else page = userRepository.findAllByActivityAndRole(pageable, filterParam, role);
         List<User> users = page.getContent();
         return users.stream().map(this::mapUserToForm).toList();
     }

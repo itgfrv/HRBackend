@@ -47,5 +47,11 @@
             <where>question='Как будет выглядеть фигура, если к ней применить поворот, как у первой?'</where>
         </update>
     </changeSet>
+    <changeSet id="4" author="gafarov">
+        <update tableName="answer">
+            <column name="answer" value="Цепь В"/>
+            <where>id=53</where>
+        </update>
+    </changeSet>
 
 </databaseChangeLog>

@@ -30,11 +30,12 @@ public class FormController extends BaseController {
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
             @RequestParam(required = false, defaultValue = "200") @Min(1) int size,
             @RequestParam(required = false, name = "filter_param") Activity filterParam,
+            @RequestParam(name = "role") Role role,
             @AuthenticationPrincipal User user
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         Pageable pageable = PageRequest.of(page, size);
-        return formService.getPaginationForm(pageable, filterParam);
+        return formService.getPaginationForm(pageable, filterParam,role);
     }
 
     @GetMapping("/{id}")
@@ -53,19 +54,22 @@ public class FormController extends BaseController {
         TaskInfo t = null;
         switch (a) {
             case REGISTERED -> {
-                t = new TaskInfo(true,false, false, false,false,false);
+                t = new TaskInfo(true,false, false, false,false,false,false);
             }
             case RESUME -> {
-                t = new TaskInfo(false,true, true,false,false, false);
+                t = new TaskInfo(false,true, true,false,false, false,false);
             }
             case WAITING_INTERVIEW -> {
-                t = new TaskInfo(false,true, false,true,false, false);
+                t = new TaskInfo(false,true, false,true,false, false,false);
             }
             case WAITING_RESULT -> {
-                t = new TaskInfo(false,true, false,true, false,true);
+                t = new TaskInfo(false,true, false,true, false,true,false);
             }
             case INTERVIEW -> {
-                t = new TaskInfo(false, true,false, true,true, false);
+                t = new TaskInfo(false, true,false, true,true, false,false);
+            }
+            case CASE_STUDY -> {
+                t = new TaskInfo(false, true,false, true,false, true,true);
             }
         }
         return t;
@@ -83,7 +87,8 @@ public class FormController extends BaseController {
             @JsonProperty("interview")
             boolean interview,
             @JsonProperty("is_interview_done")
-            boolean interviewDone
+            boolean interviewDone,
+            boolean caseStudy
     ) {
     }
 }
