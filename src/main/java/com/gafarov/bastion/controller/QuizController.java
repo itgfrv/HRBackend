@@ -4,6 +4,7 @@ import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.model.quiz.QuizAnswer;
 import com.gafarov.bastion.model.quiz.QuizDto;
 import com.gafarov.bastion.model.quiz.ResultDto;
+import com.gafarov.bastion.model.quiz.UserAnswerDto;
 import com.gafarov.bastion.service.impl.QuizServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,5 +34,9 @@ public class QuizController extends BaseController {
             @AuthenticationPrincipal User user
     ) {
         return quizService.checkResult(answers, user, id);
+    }
+    @GetMapping("/result/{userResultId}")
+    public List<UserAnswerDto> getUserResult(@PathVariable Integer userResultId) {
+        return quizService.getUserResultByUserResultId(userResultId);
     }
 }

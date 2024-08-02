@@ -5,12 +5,10 @@ import com.gafarov.bastion.entity.quiz.*;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.exception.ForbiddenException;
+import com.gafarov.bastion.mapper.QuestionMapper;
 import com.gafarov.bastion.mapper.QuizMapper;
 import com.gafarov.bastion.mapper.ResultMapper;
-import com.gafarov.bastion.model.quiz.QuizAnswer;
-import com.gafarov.bastion.model.quiz.QuizDto;
-import com.gafarov.bastion.model.quiz.QuizResultDto;
-import com.gafarov.bastion.model.quiz.ResultDto;
+import com.gafarov.bastion.model.quiz.*;
 import com.gafarov.bastion.repository.*;
 import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
@@ -99,6 +97,28 @@ public class QuizServiceImpl implements QuizService {
             }
         }
         return resultDtos;
+    }
+
+    public List<UserAnswerDto> getUserResultByUserResultId(Integer userResultId) {
+        UserResult userResult = userResultRepository.findById(userResultId).orElseThrow();
+        List<Question> questions = userResult.getQuiz().getQuestionList();
+        List<UserAnswer> userAnswers = userAnswerRepository.findAllByUserResultId(userResultId);
+        Map<Integer, UserAnswer> userAnswerMap = userAnswers.stream()
+                .collect(Collectors.toMap(ua -> ua.getQuestion().getId(), ua -> ua));
+        return questions.stream().map(question -> {
+            UserAnswerDto userAnswerDto = new UserAnswerDto();
+            QuestionDto questionDto = QuestionMapper.INSTANCE.mapQuestionToQuestionDto(question);
+            userAnswerDto.setQuestion(questionDto);
+            Integer correctAnswer = question.getAnswers().stream().filter(Answer::isCorrect).toList().get(0).getId();
+            userAnswerDto.setCorrectAnswerId(correctAnswer);
+            if (userAnswerMap.containsKey(question.getId())) {
+                Integer userAnswerId = userAnswerMap.get(question.getId()).getAnswer().getId();
+                userAnswerDto.setUserAnswerId(userAnswerId);
+            } else {
+                userAnswerDto.setUserAnswerId(null);
+            }
+            return userAnswerDto;
+        }).toList();
     }
 
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="gafarov">
+        <sql>
+            CREATE TABLE comment (
+                id SERIAL PRIMARY KEY,
+                admin_id INT NOT NULL,
+                user_id INT NOT NULL,
+                content VARCHAR(500) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (admin_id) REFERENCES users (id),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

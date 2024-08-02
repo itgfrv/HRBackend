@@ -3,7 +3,6 @@ package com.gafarov.bastion.controller;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
-import com.gafarov.bastion.entity.user.UserStatus;
 import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,8 @@
 package com.gafarov.bastion.mapper;
 
+import com.gafarov.bastion.entity.quiz.Question;
 import com.gafarov.bastion.entity.quiz.Quiz;
+import com.gafarov.bastion.model.quiz.QuestionDto;
 import com.gafarov.bastion.model.quiz.QuizDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -10,5 +12,4 @@ public interface QuizMapper {
     QuizMapper INSTANCE = Mappers.getMapper(QuizMapper.class);
 
     QuizDto mapQuizToQuizDto(Quiz quiz);
-
 }
