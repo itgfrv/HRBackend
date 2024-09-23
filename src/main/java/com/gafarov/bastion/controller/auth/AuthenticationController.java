@@ -32,5 +32,9 @@ public class AuthenticationController extends BaseController {
     ) {
         return authenticationService.authenticate(request);
     }
-
+    @PutMapping("/{user_id}")
+    public void updatePassword(@PathVariable(name = "user_id") Integer userId, @RequestBody ChangeRequest newPassword){
+        System.out.println(newPassword.getNewPassword());
+        authenticationService.updatePassword(userId, newPassword.getNewPassword());
+    }
 }

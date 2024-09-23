@@ -4,6 +4,8 @@ import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.UserStatus;
 
+import java.time.LocalDateTime;
+
 public record PersonalInfo(
         Integer id,
         String email,
@@ -11,6 +13,8 @@ public record PersonalInfo(
         String lastname,
         Role role,
         UserStatus userStatus,
-        Activity activity
+        Activity activity,
+        LocalDateTime createdDate,
+        LocalDateTime lastActivityDate
 ) {
 }

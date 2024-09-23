@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,6 @@ public class FormDto {
     private String lastname;
     private UserStatus status;
     private String activity;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastActivityDate;
 }

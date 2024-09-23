@@ -35,7 +35,7 @@ public class FormController extends BaseController {
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         Pageable pageable = PageRequest.of(page, size);
-        return formService.getPaginationForm(pageable, filterParam,role);
+        return formService.getPaginationForm(pageable, filterParam, role);
     }
 
     @GetMapping("/{id}")
@@ -46,30 +46,31 @@ public class FormController extends BaseController {
 
     @GetMapping("/personal")
     public PersonalInfo getPersonalInfo(@AuthenticationPrincipal User user) {
-        return new PersonalInfo(user.getId(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getRole(), user.getUserStatus(), user.getActivity());
+        return new PersonalInfo(user.getId(), user.getEmail(), user.getFirstname(), user.getLastname(), user.getRole(), user.getUserStatus(), user.getActivity(), user.getCreatedDate(), user.getLastActivityDate());
     }
+
     @GetMapping("/task-info")
     public TaskInfo getTaskInfo(@AuthenticationPrincipal User user) {
         Activity a = user.getActivity();
         TaskInfo t = null;
         switch (a) {
             case REGISTERED -> {
-                t = new TaskInfo(true,false, false, false,false,false,false);
+                t = new TaskInfo(true, false, false, false, false, false, false);
             }
             case RESUME -> {
-                t = new TaskInfo(false,true, true,false,false, false,false);
+                t = new TaskInfo(false, true, true, false, false, false, false);
             }
             case WAITING_INTERVIEW -> {
-                t = new TaskInfo(false,true, false,true,false, false,false);
+                t = new TaskInfo(false, true, false, true, false, false, false);
             }
             case WAITING_RESULT -> {
-                t = new TaskInfo(false,true, false,true, false,true,false);
+                t = new TaskInfo(false, true, false, true, false, true, false);
             }
             case INTERVIEW -> {
-                t = new TaskInfo(false, true,false, true,true, false,false);
+                t = new TaskInfo(false, true, false, true, true, false, false);
             }
             case CASE_STUDY -> {
-                t = new TaskInfo(false, true,false, true,false, true,true);
+                t = new TaskInfo(false, true, false, true, false, true, true);
             }
         }
         return t;

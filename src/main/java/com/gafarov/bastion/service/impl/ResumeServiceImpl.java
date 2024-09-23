@@ -15,6 +15,7 @@ import com.gafarov.bastion.service.ResumeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,6 +53,7 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDto sendResume(User user, List<ResumeAnswerDto> answers) {
         updateResume(user, answers);
         user.setActivity(Activity.RESUME);
+        user.setLastActivityDate(LocalDateTime.now());
         userRepository.save(user);
         return getResume(user);
     }

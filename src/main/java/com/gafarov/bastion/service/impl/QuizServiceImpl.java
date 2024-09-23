@@ -14,6 +14,7 @@ import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,9 +68,11 @@ public class QuizServiceImpl implements QuizService {
             var results = userResultService.saveResult(result, maxResult, user, quiz);
             if (quizId == 1) {
                 user.setActivity(Activity.WAITING_INTERVIEW);
+                user.setLastActivityDate(LocalDateTime.now());
                 userRepository.save(user);
             } else {
                 user.setActivity(Activity.WAITING_RESULT);
+                user.setLastActivityDate(LocalDateTime.now());
                 userRepository.save(user);
             }
             return results.stream().map(ResultMapper.INSTANCE::mapResultToResultDto).toList();

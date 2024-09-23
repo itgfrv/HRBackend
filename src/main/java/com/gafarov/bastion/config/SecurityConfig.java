@@ -14,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @Configuration
@@ -40,6 +41,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/case-study/**")
                         .permitAll()
+                        //.requestMatchers(HttpMethod.PUT,"/auth/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,7 +1,9 @@
 package com.gafarov.bastion.controller;
 
 import com.gafarov.bastion.entity.Comment;
+import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
+import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.CommentDto;
 import com.gafarov.bastion.model.CommentRequestDto;
 import com.gafarov.bastion.service.impl.CommentService;
@@ -23,12 +25,13 @@ public class CommentController {
 
     @GetMapping("/{userId}")
     public List<CommentDto> getUserComments(@PathVariable Integer userId, @AuthenticationPrincipal User admin) {
+        if (admin.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return commentService.getComments(userId);
     }
 
     @PostMapping
     public CommentDto addComment(@RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal User admin) {
-        System.out.println(admin);
+        if (admin.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");
         return commentService.createComment(requestDto.getUserId(), admin, requestDto.getContent());
     }
 }

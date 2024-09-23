@@ -40,7 +40,7 @@ public class FormServiceImpl {
             case INTERVIEW -> activity += "Заполнил резюме/Выполнил демо тест/Выдан доступ к финальному тесту";
             case WAITING_RESULT -> activity += "Заполнил резюме/Выполнил демо тест/Выполнил финальный тест/";
         }
-        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), activity);
+        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), activity, user.getCreatedDate(),user.getLastActivityDate());
     }
 
     public FullFormDto getUserInfo(Integer id) {

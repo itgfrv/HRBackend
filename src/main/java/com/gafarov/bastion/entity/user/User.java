@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +42,10 @@ public class User implements UserDetails {
     private UserStatus userStatus;
     @Enumerated(EnumType.STRING)
     private Activity activity;
-
+    @Column(name = "last_activity_date")
+    private LocalDateTime lastActivityDate;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
