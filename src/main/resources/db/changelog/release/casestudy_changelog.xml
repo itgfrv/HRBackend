@@ -40,4 +40,9 @@
     <changeSet id="2" author="gafarov">
         <loadData file="db/changelog/data/criteria.csv" tableName="criteria" separator=";"/>
     </changeSet>
+    <changeSet id="3" author="gafarov">
+        <addColumn tableName="case_study_mark">
+            <column name="comment" type="varchar(500)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
