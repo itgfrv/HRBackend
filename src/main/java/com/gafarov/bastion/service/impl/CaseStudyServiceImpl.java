@@ -71,5 +71,10 @@ public class CaseStudyServiceImpl implements CaseStudyService {
     public List<CriteriaDto> getCriteria() {
         return criteriaRepository.findAll().stream().map(c -> new CriteriaDto(c.getId(), c.getCriteria())).toList();
     }
-
+    public List<File> getAttemptFiles(Integer attemptId) {
+        return fileRepository.findAllByCaseStudyAttemptId(attemptId);
+    }
+    public CaseStudyAttempt getCaseStudyAttempt(Integer attemptId) {
+        return caseStudyAttemptRepository.findById(attemptId).orElseThrow();
+    }
 }

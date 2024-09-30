@@ -1,5 +1,6 @@
 package com.gafarov.bastion.entity.casestudy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class File {
 
     @ManyToOne
     @JoinColumn(name = "case_study_attempt_id", nullable = false)
+    @JsonIgnore
     private CaseStudyAttempt caseStudyAttempt;
 
     @Column(name = "full_file_path", nullable = false)

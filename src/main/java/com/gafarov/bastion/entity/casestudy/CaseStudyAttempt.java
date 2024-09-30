@@ -3,6 +3,7 @@ package com.gafarov.bastion.entity.casestudy;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 @Data
 @Entity
 @Table(name = "case_study_attempt")
@@ -19,4 +20,10 @@ public class CaseStudyAttempt {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
+
+    @OneToMany(mappedBy = "caseStudyAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> files;
+
+    @OneToMany(mappedBy = "caseStudyAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CaseStudyMark> marks;
 }

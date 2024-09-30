@@ -1,5 +1,6 @@
 package com.gafarov.bastion.controller;
 
+import com.gafarov.bastion.entity.casestudy.CaseStudyAttempt;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
@@ -7,6 +8,8 @@ import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.casestudy.CaseStudyAttemptDto;
 import com.gafarov.bastion.model.casestudy.CaseStudyMarkDto;
 import com.gafarov.bastion.model.casestudy.CriteriaDto;
+import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptDTO;
+import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptMapper;
 import com.gafarov.bastion.service.impl.CaseStudyServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +72,7 @@ public class CaseStudyController {
         service.addAttemptsToUser(userId);
     }
 
-    @PostMapping(value = "/attempts/")
+    @PostMapping(value = "/attempts")
     @Operation(
             summary = "WIP сохранить результаты проверки работы "
     )
@@ -84,4 +87,19 @@ public class CaseStudyController {
     public List<CriteriaDto> getCriteria() {
         return service.getCriteria();
     }
+
+    @GetMapping("/attempt/{id}")
+    @Operation(
+            summary = "Получить список критериев для проверки"
+    )
+    public CaseStudyAttemptDTO getCriteria(@PathVariable Integer id) {
+        return CaseStudyAttemptMapper.toDto(service.getCaseStudyAttempt(id));
+    }
+//    @GetMapping("/files")
+//    @Operation(
+//            summary = "Получить список критериев для проверки"
+//    )
+//    public List<CriteriaDto> getCriteria() {
+//        return service.getCriteria();
+//    }
 }
