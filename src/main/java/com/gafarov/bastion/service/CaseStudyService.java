@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CaseStudyService {
     void uploadFiles(MultipartFile[] files, User user, Integer attemptId);
-    void addAttemptsToUser(Integer userId);
+    Integer addAttemptsToUser(Integer userId);
     List<CaseStudyAttemptDto> getUserAttempts(Integer userId);
 }

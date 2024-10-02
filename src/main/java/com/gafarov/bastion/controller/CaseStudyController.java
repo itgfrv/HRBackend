@@ -8,6 +8,7 @@ import com.gafarov.bastion.exception.ForbiddenException;
 import com.gafarov.bastion.model.casestudy.CaseStudyAttemptDto;
 import com.gafarov.bastion.model.casestudy.CaseStudyMarkDto;
 import com.gafarov.bastion.model.casestudy.CriteriaDto;
+import com.gafarov.bastion.model.casestudy.EvaluationDTO;
 import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptDTO;
 import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptMapper;
 import com.gafarov.bastion.service.impl.CaseStudyServiceImpl;
@@ -18,6 +19,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -47,7 +50,9 @@ public class CaseStudyController {
             summary = "Получить список своих попыток"
     )
     public List<CaseStudyAttemptDto> getAttempts(@AuthenticationPrincipal User user) {
-        return service.getUserAttempts(user.getId());
+        var list = service.getUserAttempts(user.getId());
+        list.sort(Comparator.comparingInt(CaseStudyAttemptDto::id));
+        return list;
     }
 
     @GetMapping(value = "/attempts/{userId}")
@@ -58,18 +63,20 @@ public class CaseStudyController {
         if (user.getRole() != Role.ADMIN) {
             throw new ForbiddenException("forbidden");
         }
-        return service.getUserAttempts(userId);
+        var list = service.getUserAttempts(userId);
+        list.sort(Comparator.comparingInt(CaseStudyAttemptDto::id));
+        return list;
     }
 
     @PostMapping(value = "/attempts/add/{userId}")
     @Operation(
             summary = "Добавить пользователю попытку"
     )
-    public void addAttemptsToUser(@AuthenticationPrincipal User user, @PathVariable Integer userId) {
+    public int addAttemptsToUser(@AuthenticationPrincipal User user, @PathVariable Integer userId) {
         if (user.getRole() != Role.ADMIN) {
             throw new ForbiddenException("forbidden");
         }
-        service.addAttemptsToUser(userId);
+       return service.addAttemptsToUser(userId);
     }
 
     @PostMapping(value = "/attempts")
@@ -89,17 +96,12 @@ public class CaseStudyController {
     }
 
     @GetMapping("/attempt/{id}")
-    @Operation(
-            summary = "Получить список критериев для проверки"
-    )
-    public CaseStudyAttemptDTO getCriteria(@PathVariable Integer id) {
-        return CaseStudyAttemptMapper.toDto(service.getCaseStudyAttempt(id));
+    public CaseStudyAttemptDTO getCaseStudyAttemptDTO(@AuthenticationPrincipal User user, @PathVariable Integer id) {
+        return CaseStudyAttemptMapper.toDto(service.getCaseStudyAttempt(id, user));
     }
-//    @GetMapping("/files")
-//    @Operation(
-//            summary = "Получить список критериев для проверки"
-//    )
-//    public List<CriteriaDto> getCriteria() {
-//        return service.getCriteria();
-//    }
+
+    @PostMapping("/attempt/{attemptId}")
+    public void evaluateCaseStudy(@PathVariable Integer attemptId, @RequestBody List<EvaluationDTO> evaluations) {
+        service.saveEvaluations(attemptId, evaluations);
+    }
 }

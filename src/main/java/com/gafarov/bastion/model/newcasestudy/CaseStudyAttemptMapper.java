@@ -44,6 +44,7 @@ public class CaseStudyAttemptMapper {
         CaseStudyMarkDTO markDTO = new CaseStudyMarkDTO();
         markDTO.setMark(mark.getMark());
         markDTO.setComment(mark.getComment());
+        markDTO.setCriteriaId(mark.getCriteria().getId());
         return markDTO;
     }
 
