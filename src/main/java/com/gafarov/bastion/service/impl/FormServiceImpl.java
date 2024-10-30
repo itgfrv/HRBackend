@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class FormServiceImpl {
         if (filterParam == null) page = userRepository.findAllByRole(pageable, role);
         else page = userRepository.findAllByActivityAndRole(pageable, filterParam, role);
         List<User> users = page.getContent();
-        return users.stream().map(this::mapUserToForm).toList();
+        return users.stream().map(this::mapUserToForm).sorted(Comparator.comparing(FormDto::getId)).toList();
     }
 
     private FormDto mapUserToForm(User user) {
