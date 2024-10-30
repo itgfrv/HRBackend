@@ -47,6 +47,8 @@ public class CaseStudyServiceImpl implements CaseStudyService {
             }
             attempt.setStatus(AttemptStatus.SEND);
             caseStudyAttemptRepository.save(attempt);
+            user.setViewed(false);
+            userRepository.save(user);
         }
     }
 
@@ -67,7 +69,12 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         return new ArrayList<>(
                 caseStudyAttemptRepository.findAllByUserId(userId)
                         .stream()
-                        .map(attempt -> new CaseStudyAttemptDto(attempt.getId(), attempt.getStatus()))
+                        .map(attempt ->{
+                            var marks = attempt.getMarks();
+                            var totalMark = marks.stream().map(m->m.getMark()).reduce(0, Integer::sum);
+                            var maxMark = marks.stream().map(m->m.getMark()).reduce(0, (a,b)->a+2);
+                            return new CaseStudyAttemptDto(attempt.getId(), attempt.getStatus(), totalMark,maxMark );
+                        } )
                         .toList()
         );
     }

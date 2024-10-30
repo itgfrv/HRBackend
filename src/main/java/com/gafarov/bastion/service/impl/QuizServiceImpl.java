@@ -68,10 +68,12 @@ public class QuizServiceImpl implements QuizService {
             var results = userResultService.saveResult(result, maxResult, user, quiz);
             if (quizId == 1) {
                 user.setActivity(Activity.WAITING_INTERVIEW);
+                user.setViewed(false);
                 user.setLastActivityDate(LocalDateTime.now());
                 userRepository.save(user);
             } else {
                 user.setActivity(Activity.WAITING_RESULT);
+                user.setViewed(false);
                 user.setLastActivityDate(LocalDateTime.now());
                 userRepository.save(user);
             }

@@ -39,8 +39,11 @@ public class FormServiceImpl {
             case WAITING_INTERVIEW -> activity += "Заполнил резюме/Выполнил демо тест/";
             case INTERVIEW -> activity += "Заполнил резюме/Выполнил демо тест/Выдан доступ к финальному тесту";
             case WAITING_RESULT -> activity += "Заполнил резюме/Выполнил демо тест/Выполнил финальный тест/";
+            case CASE_STUDY -> activity+= "Выполняет чертежное задание";
+            case CASE_DONE -> activity+= "Выполнил чертежное задание";
         }
-        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getUserStatus(), activity, user.getCreatedDate(),user.getLastActivityDate());
+        return new FormDto(user.getId(), user.getFirstname(), user.getLastname(), user.getActivity().name(), activity,
+                user.getCreatedDate(),user.getLastActivityDate(), user.isViewed());
     }
 
     public FullFormDto getUserInfo(Integer id) {
@@ -50,6 +53,9 @@ public class FormServiceImpl {
         fullForm.setUser(mapUserToForm(u.get()));
         fullForm.setResumeDto(resumeService.getResume(u.get()));
         fullForm.setQuizResult(quizService.getUserResult(id));
+        var user  = u.get();
+        user.setViewed(true);
+        userRepository.save(user);
         return fullForm;
     }
 

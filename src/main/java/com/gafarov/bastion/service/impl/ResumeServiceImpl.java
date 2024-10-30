@@ -54,6 +54,7 @@ public class ResumeServiceImpl implements ResumeService {
         updateResume(user, answers);
         user.setActivity(Activity.RESUME);
         user.setLastActivityDate(LocalDateTime.now());
+        user.setViewed(false);
         userRepository.save(user);
         return getResume(user);
     }

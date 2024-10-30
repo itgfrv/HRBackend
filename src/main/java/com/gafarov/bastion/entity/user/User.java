@@ -46,6 +46,8 @@ public class User implements UserDetails {
     private LocalDateTime lastActivityDate;
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+    @Column(name = "is_viewed")
+    private boolean isViewed;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

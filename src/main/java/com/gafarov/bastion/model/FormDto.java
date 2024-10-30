@@ -15,8 +15,9 @@ public class FormDto {
     private int id;
     private String firstname;
     private String lastname;
-    private UserStatus status;
+    private String status;
     private String activity;
     private LocalDateTime createdDate;
     private LocalDateTime lastActivityDate;
+    private boolean isViewed;
 }

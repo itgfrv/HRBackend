@@ -28,4 +28,10 @@
                 add column created_date TIMESTAMP WITH TIME ZONE;
         </sql>
     </changeSet>
+    <changeSet id="3" author="gafarov">
+        <sql>
+            ALTER TABLE users
+                add column is_viewed BOOLEAN;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
