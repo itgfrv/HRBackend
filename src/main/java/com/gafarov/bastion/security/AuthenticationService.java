@@ -35,6 +35,7 @@ public class AuthenticationService {
                 .userStatus(UserStatus.REJECT)
                 .createdDate(LocalDateTime.now())
                 .lastActivityDate(LocalDateTime.now())
+                .isViewed(false)
                 .build();
         var savedUser = userService.addNewUser(user);
         var jwtToken = jwtService.generateToken(user);
