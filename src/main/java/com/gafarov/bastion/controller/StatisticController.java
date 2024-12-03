@@ -4,6 +4,7 @@ import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.service.statistic.StatisticDataResponse;
 import com.gafarov.bastion.service.statistic.StatisticService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,9 @@ import java.time.LocalDate;
 @RequestMapping("/statistic")
 @AllArgsConstructor
 public class StatisticController {
+    @Autowired
     private final StatisticService statisticService;
+
 
     @PostMapping("/getStatistic")
     public StatisticDataResponse getStatistic(String statistic, String userId, LocalDate startDate,
