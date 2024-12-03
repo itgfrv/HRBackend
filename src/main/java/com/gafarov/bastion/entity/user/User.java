@@ -48,7 +48,8 @@ public class User implements UserDetails {
     private LocalDateTime createdDate;
     @Column(name = "is_viewed")
     private boolean isViewed;
-
+    @Column(name = "statistic_id")
+    private Integer statisticId;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

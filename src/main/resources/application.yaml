@@ -24,6 +24,14 @@ springdoc:
 server:
   servlet:
     context-path: /api/v1
+statistic-service:
+  url: ${STATISTIC_URL}
+  auth:
+    username: ${STATISTIC_AUTH_USERNAME}
+    password: ${STATISTIC_AUTH_PASSWORD}
+  request:
+    login: ${STATISTIC_REQUEST_LOGIN}
+    password: ${STATISTIC_REQUEST_PASSWORD}
 amazon:
   access-key: ${ACCESS_KEY}
   secret-key: ${SECRET_KEY}

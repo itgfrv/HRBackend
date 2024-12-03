@@ -34,4 +34,10 @@
                 add column is_viewed BOOLEAN;
         </sql>
     </changeSet>
+    <changeSet id="4" author="gafarov">
+        <sql>
+            ALTER TABLE users
+                add column statistic_id int;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

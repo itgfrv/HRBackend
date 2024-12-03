@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/case-study/**")
                         .permitAll()
+                        .requestMatchers("/statistic/**")
+                        .permitAll()
                         //.requestMatchers(HttpMethod.PUT,"/auth/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
