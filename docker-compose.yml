@@ -4,6 +4,7 @@ services:
   backend:
     container_name: backend
     image: com.gafarov/backend:latest
+    build: .
     ports:
       - "8080:8080"
     environment:
@@ -12,14 +13,12 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - DB_SERVER=${DB_SERVER}
       - POSTGRES_PORT=${POSTGRES_PORT}
-      - ACCESS_KEY=${ACCESS_KEY}
-      - SECRET_KEY=${SECRET_KEY}
-      - BUCKET_NAME=${BUCKET_NAME}
-      - ENDPOINT_URL=${ENDPOINT_URL}
       - STATISTIC_URL=${STATISTIC_URL}
       - STATISTIC_AUTH_USERNAME=${STATISTIC_AUTH_USERNAME}
       - STATISTIC_AUTH_PASSWORD=${STATISTIC_AUTH_PASSWORD}
       - STATISTIC_REQUEST_LOGIN=${STATISTIC_REQUEST_LOGIN}
       - STATISTIC_REQUEST_PASSWORD=${STATISTIC_REQUEST_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - /home/iskander/test:/app/files
     restart: unless-stopped

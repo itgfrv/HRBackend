@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/statistic/**")
                         .permitAll()
                         //.requestMatchers(HttpMethod.PUT,"/auth/**").hasAuthority("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

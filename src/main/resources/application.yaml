@@ -32,9 +32,6 @@ statistic-service:
   request:
     login: ${STATISTIC_REQUEST_LOGIN}
     password: ${STATISTIC_REQUEST_PASSWORD}
-amazon:
-  access-key: ${ACCESS_KEY}
-  secret-key: ${SECRET_KEY}
-  bucket-name: ${BUCKET_NAME}
-  endpoint-url: ${ENDPOINT_URL}
-  region: ${REGION}
+file:
+  storage:
+    root-directory: /app/files

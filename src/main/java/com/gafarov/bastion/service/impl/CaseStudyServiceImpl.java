@@ -13,7 +13,6 @@ import com.gafarov.bastion.repository.casestudy.CaseStudyMarkRepository;
 import com.gafarov.bastion.repository.casestudy.CriteriaRepository;
 import com.gafarov.bastion.repository.casestudy.FileRepository;
 import com.gafarov.bastion.service.CaseStudyService;
-import com.gafarov.bastion.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +24,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class CaseStudyServiceImpl implements CaseStudyService {
-    private final S3Service s3Service;
+    private final FileService fileService;
     private final FileRepository fileRepository;
     private final CriteriaRepository criteriaRepository;
     private final CaseStudyAttemptRepository caseStudyAttemptRepository;
@@ -42,7 +41,7 @@ public class CaseStudyServiceImpl implements CaseStudyService {
                 fileEntity.setFileName(file.getOriginalFilename());
                 fileEntity.setCaseStudyAttempt(attempt);
                 fileEntity.setFullPath(fileName);
-                s3Service.uploadFile(file, fileName);
+                fileService.uploadFile(file, fileName);
                 fileRepository.save(fileEntity);
             }
             attempt.setStatus(AttemptStatus.SEND);
@@ -69,12 +68,12 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         return new ArrayList<>(
                 caseStudyAttemptRepository.findAllByUserId(userId)
                         .stream()
-                        .map(attempt ->{
+                        .map(attempt -> {
                             var marks = attempt.getMarks();
-                            var totalMark = marks.stream().map(m->m.getMark()).reduce(0, Integer::sum);
-                            var maxMark = marks.stream().map(m->m.getMark()).reduce(0, (a,b)->a+2);
-                            return new CaseStudyAttemptDto(attempt.getId(), attempt.getStatus(), totalMark,maxMark );
-                        } )
+                            var totalMark = marks.stream().map(m -> m.getMark()).reduce(0, Integer::sum);
+                            var maxMark = marks.stream().map(m -> m.getMark()).reduce(0, (a, b) -> a + 2);
+                            return new CaseStudyAttemptDto(attempt.getId(), attempt.getStatus(), totalMark, maxMark);
+                        })
                         .toList()
         );
     }

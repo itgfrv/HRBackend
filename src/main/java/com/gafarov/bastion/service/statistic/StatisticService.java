@@ -3,7 +3,6 @@ package com.gafarov.bastion.service.statistic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gafarov.bastion.service.UserService;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,6 @@ public class StatisticService {
         this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                //.sslContext(SslContextFactory.createInsecureContext())
                 .build();
     }
 

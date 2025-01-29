@@ -1,6 +1,5 @@
 package com.gafarov.bastion.controller;
 
-import com.gafarov.bastion.entity.casestudy.CaseStudyAttempt;
 import com.gafarov.bastion.entity.user.Activity;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
@@ -19,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
