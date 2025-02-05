@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="gafarov">
+        <sql>
+            create table cross_check
+            (
+                id   serial primary key,
+                name varchar(255),
+            );
+            create table cross_check_session
+            (
+                id             serial primary key,
+                cross_check_id int,
+                date           TIMESTAMP WITH TIME ZONE,
+                description    varchar(255),
+                foreign key (cross_check_id) references cross_check (id)
+            );
+            create table cross_check_question
+            (
+                id             serial primary key,
+                question       varchar(255),
+                cross_check_id int,
+                foreign key (cross_check_id) references cross_check (id)
+            );
+            create table cross_check_attempt
+            (
+                id                     serial primary key,
+                cross_check_session_id int,
+                evaluator_id           int,
+                status                 varchar(255),
+                foreign key (cross_check_session_id) references cross_check_session (id),
+                foreign key (evaluator_id) references users (id)
+            );
+            create table cross_check_evaluation
+            (
+                id           serial primary key,
+                evaluated_id int,
+                question_id  int,
+                attempt_id   int,
+                mark         int,
+                comment      varchar(255),
+                foreign key (evaluated_id) references users (id),
+                foreign key (question_id) references cross_check_question (id),
+                foreign key (attempt_id) references cross_check_attempt (id)
+            );
+            create table cross_check_rule
+            (
+                id serial primary key,
+                cross_check_id int,
+                evaluator_role varchar(255),
+                evaluated_role varchar(255),
+                foreign key (cross_check_id) references cross_check (id)
+            );
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

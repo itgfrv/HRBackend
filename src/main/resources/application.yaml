@@ -33,5 +33,4 @@ statistic-service:
     login: ${STATISTIC_REQUEST_LOGIN}
     password: ${STATISTIC_REQUEST_PASSWORD}
 file:
-  storage:
-    root-directory: /app/files
+  directory: /app/files

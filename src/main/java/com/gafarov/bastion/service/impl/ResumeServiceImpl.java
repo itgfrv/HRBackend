@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final UserRepository userRepository;
 
     public ResumeDto getResume(User user) {
-        List<ResumeQuestion> questions = questionRepository.findAll();
+        List<ResumeQuestion> questions = questionRepository.findAll().stream().sorted(Comparator.comparingInt(ResumeQuestion::getId)).toList();
         List<ResumeQuestionDto> dto = questions.stream()
                 .map(q -> new ResumeQuestionDto(q.getId(), q.getQuestion()))
                 .toList();

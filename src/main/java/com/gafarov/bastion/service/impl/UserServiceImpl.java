@@ -11,6 +11,7 @@ import com.gafarov.bastion.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -67,6 +68,10 @@ public class UserServiceImpl implements UserService {
     public void updateActivity(User user, Activity activity) {
         user.setActivity(activity);
         userRepository.save(user);
+    }
+
+    public List<User> findUsersByRole(Role role) {
+        return userRepository.findAllByRole(role);
     }
 
 }
