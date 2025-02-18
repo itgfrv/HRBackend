@@ -12,4 +12,6 @@ import java.util.List;
 public class StatisticDataResponse {
     private String status;
     private List<StatisticData> data;
+    private List<Double> trend;
+    private Double avg;
 }

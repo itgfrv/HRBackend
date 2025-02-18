@@ -5,6 +5,8 @@ import com.gafarov.bastion.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,7 +36,26 @@ public class AuthenticationController extends BaseController {
     }
     @PutMapping("/{user_id}")
     public void updatePassword(@PathVariable(name = "user_id") Integer userId, @RequestBody ChangeRequest newPassword){
-        System.out.println(newPassword.getNewPassword());
         authenticationService.updatePassword(userId, newPassword.getNewPassword());
+    }
+
+    @PostMapping("/request")
+    public ResponseEntity<String> updatePasswordRequest(@RequestParam String userEmail) {
+        String response = authenticationService.updatePasswordRequest(userEmail);
+        if (response.isEmpty()) {
+            return ResponseEntity.ok("Запрос на смену пароля отправлен. Проверьте почту.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PostMapping("/change")
+    public ResponseEntity<String> changePasswordRequest(@RequestParam String resetPasswordUUID, @RequestParam String newPassword) {
+        String response = authenticationService.changePasswordRequest(resetPasswordUUID, newPassword);
+        if (response.isEmpty()) {
+            return ResponseEntity.ok("Пароль успешно изменен.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 }

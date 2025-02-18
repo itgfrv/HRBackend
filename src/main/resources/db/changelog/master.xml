@@ -9,4 +9,5 @@
     <include file="release/result_changelog.xml" relativeToChangelogFile="true"/>
     <include file="release/casestudy_changelog.xml" relativeToChangelogFile="true"/>
     <include file="release/comment_changelog.xml" relativeToChangelogFile="true"/>
+    <include file="release/cross_check_changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

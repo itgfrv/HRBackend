@@ -34,3 +34,14 @@ statistic-service:
     password: ${STATISTIC_REQUEST_PASSWORD}
 file:
   directory: /app/files
+mail:
+  host: ${MAIL_HOST}
+  port: ${MAIL_PORT}
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+  protocol: smtp
+  tls: false
+  auth: true
+  hr: ${MAIL_HR}
+  userLink: ${MAIL_USERLINK}
+  resetLink: ${MAIL_RESETLINK}

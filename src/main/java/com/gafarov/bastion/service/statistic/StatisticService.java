@@ -3,6 +3,7 @@ package com.gafarov.bastion.service.statistic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -71,16 +73,70 @@ public class StatisticService {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                return parseResponse(response.body());
+                var statisticData  = parseResponse(response.body());
+                double avg = 0d;
+                try{
+                    avg  = calculateAvg(endpoint, startDate, endDate);
+                } catch (Exception e) {
+                }
+                return new StatisticDataResponse("success", statisticData, calculateTrend(statisticData), avg);
             } else {
-                return new StatisticDataResponse("error", new ArrayList<>());
+                return new StatisticDataResponse("error", Collections.emptyList(), Collections.emptyList(), 0d);
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-//    public String getUserOrdersInWorkHours(String userId, LocalDate startDate, LocalDate endDate) {
+    private List<StatisticData> parseResponse(String response) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Response apiResponse = objectMapper.readValue(response, Response.class);
+
+        if ("success".equals(apiResponse.getStatus())) {
+            Map<String, Double> resultMap = objectMapper.convertValue(apiResponse.getResult(), new TypeReference<Map<String, Double>>() {
+            });
+            List<StatisticData> records = new ArrayList<>();
+
+            for (Map.Entry<String, Double> entry : resultMap.entrySet()) {
+                LocalDate date = LocalDate.parse(entry.getKey(), formatter);
+                double count = entry.getValue();
+                records.add(new StatisticData(date, count));
+            }
+            return records;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+    private List<Double> calculateTrend(List<StatisticData> records) {
+        if (records.isEmpty()) return Collections.emptyList();
+
+        int n = records.size();
+        double sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        for (int i = 0; i < n; i++) {
+            sumX += i;
+            sumY += records.get(i).getCount();
+            sumXY += i * records.get(i).getCount();
+            sumXX += i * i;
+        }
+        double slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        double intercept = (sumY - slope * sumX) / n;
+        List<Double> trendValues = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            trendValues.add(slope * i + intercept);
+        }
+        return trendValues;
+    }
+    private Double calculateAvg(String endpoint, LocalDate startDate, LocalDate endDate) throws IOException, InterruptedException {
+        var employees = userService.findUsersByRole(Role.EMPLOYEE);
+        var allEmployeeStatistic = new ArrayList<StatisticData>();
+        for(var e: employees) {
+            HttpRequest request = getRequest(endpoint, String.valueOf(e.getStatisticId()), startDate.format(formatter), endDate.format(formatter));
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            allEmployeeStatistic.addAll(parseResponse(response.body()));
+        }
+        return allEmployeeStatistic.stream().mapToDouble(StatisticData::getCount).average().orElseThrow();
+    }
+    //    public String getUserOrdersInWorkHours(String userId, LocalDate startDate, LocalDate endDate) {
 //        HttpRequest request = getRequest("getUserOrdersInWorkHours", userId, startDate.format(formatter), endDate.format(formatter));
 //        try {
 //            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -110,25 +166,4 @@ public class StatisticService {
 //            throw new RuntimeException(e);
 //        }
 //    }
-
-    private StatisticDataResponse parseResponse(String response) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Response apiResponse = objectMapper.readValue(response, Response.class);
-
-        if ("success".equals(apiResponse.getStatus())) {
-            Map<String, Double> resultMap = objectMapper.convertValue(apiResponse.getResult(), new TypeReference<Map<String, Double>>() {
-            });
-            List<StatisticData> records = new ArrayList<>();
-
-            for (Map.Entry<String, Double> entry : resultMap.entrySet()) {
-                LocalDate date = LocalDate.parse(entry.getKey(), formatter);
-                double count = entry.getValue();
-                records.add(new StatisticData(date, count));
-            }
-            return new StatisticDataResponse("success", records);
-        } else {
-            String error = objectMapper.convertValue(apiResponse.getResult(), String.class);
-            return new StatisticDataResponse(error, new ArrayList<>());
-        }
-    }
 }

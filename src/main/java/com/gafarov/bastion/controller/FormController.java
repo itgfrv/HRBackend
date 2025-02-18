@@ -30,7 +30,7 @@ public class FormController extends BaseController {
             @RequestParam(required = false, defaultValue = "0") @Min(0) int page,
             @RequestParam(required = false, defaultValue = "200") @Min(1) int size,
             @RequestParam(required = false, name = "filter_param") Activity filterParam,
-            @RequestParam(name = "role") Role role,
+            @RequestParam(name = "role", defaultValue ="USER") Role role,
             @AuthenticationPrincipal User user
     ) {
         if (user.getRole() != Role.ADMIN) throw new ForbiddenException("only for admin");

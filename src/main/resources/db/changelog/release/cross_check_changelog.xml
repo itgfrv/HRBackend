@@ -9,7 +9,7 @@
             create table cross_check
             (
                 id   serial primary key,
-                name varchar(255),
+                name varchar(255)
             );
             create table cross_check_session
             (
@@ -57,5 +57,10 @@
             );
 
         </sql>
+    </changeSet>
+    <changeSet id="2" author="gafarov">
+        <loadData file="db/changelog/data/cross-check.csv" tableName="cross_check" separator=";"/>
+        <loadData file="db/changelog/data/cross-check-rule.csv" tableName="cross_check_rule" separator=";"/>
+        <loadData file="db/changelog/data/cross-check-questions.csv" tableName="cross_check_question" separator=";"/>
     </changeSet>
 </databaseChangeLog>

@@ -10,8 +10,10 @@ import com.gafarov.bastion.mapper.QuizMapper;
 import com.gafarov.bastion.mapper.ResultMapper;
 import com.gafarov.bastion.model.quiz.*;
 import com.gafarov.bastion.repository.*;
+import com.gafarov.bastion.service.EmailService;
 import com.gafarov.bastion.service.QuizService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ public class QuizServiceImpl implements QuizService {
     private final ResultRepository repository;
     private final UserRepository userRepository;
     private final UserAnswerRepository userAnswerRepository;
+    private final EmailService emailService;
 
     public QuizDto getQuiz(Integer quizId, User user) {
         if ((user.getActivity() == Activity.RESUME && quizId == 1) || (user.getActivity() == Activity.INTERVIEW && quizId == 2)) {
@@ -71,6 +74,11 @@ public class QuizServiceImpl implements QuizService {
                 user.setViewed(false);
                 user.setLastActivityDate(LocalDateTime.now());
                 userRepository.save(user);
+                try {
+                    emailService.sendApplicationNotification(String.valueOf(user.getId()), String.format("%s %s",user.getFirstname(), user.getLastname()));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             } else {
                 user.setActivity(Activity.WAITING_RESULT);
                 user.setViewed(false);

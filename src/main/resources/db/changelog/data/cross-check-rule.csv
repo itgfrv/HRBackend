@@ -1,0 +1,4 @@
+id;cross_check_id;evaluator_role;evaluated_role
+1;1;EMPLOYEE;EMPLOYEE
+2;1;ADMIN;EMPLOYEE
+3;2;ADMIN;EMPLOYEE

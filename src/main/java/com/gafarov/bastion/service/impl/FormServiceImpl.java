@@ -28,7 +28,7 @@ public class FormServiceImpl {
         if (filterParam == null) page = userRepository.findAllByRole(pageable, role);
         else page = userRepository.findAllByActivityAndRole(pageable, filterParam, role);
         List<User> users = page.getContent();
-        return users.stream().map(this::mapUserToForm).sorted(Comparator.comparing(FormDto::getId)).toList();
+        return users.stream().map(this::mapUserToForm).sorted(Comparator.comparing(FormDto::getId).reversed()).toList();
     }
 
     private FormDto mapUserToForm(User user) {

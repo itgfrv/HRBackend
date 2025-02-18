@@ -13,4 +13,5 @@ public class CrossCheckAttemptDetailsDto {
     private Integer attemptId;
     private List<UserDto> users;
     private List<QuestionDto> questions;
+    private String status;
 }

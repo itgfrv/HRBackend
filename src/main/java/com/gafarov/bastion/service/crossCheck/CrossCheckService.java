@@ -2,6 +2,7 @@ package com.gafarov.bastion.service.crossCheck;
 
 import com.gafarov.bastion.entity.crossCheck.*;
 import com.gafarov.bastion.entity.user.Role;
+import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.model.crossCheck.*;
 import com.gafarov.bastion.repository.crossCheck.*;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
@@ -9,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,14 +30,16 @@ public class CrossCheckService {
         crossCheckSession.setDate(LocalDateTime.now());
         crossCheckSession.setDescription(description);
         var savedSession = sessionRepository.save(crossCheckSession);
-        var role = crossCheck.getRules().stream().map(CrossCheckRule::getEvaluatorRole).distinct().toList().get(0);
-        var users = userService.findUsersByRole(Role.valueOf(role));
-        for (var user : users) {
-            var crossCheckAttempt = new CrossCheckAttempt();
-            crossCheckAttempt.setEvaluator(user);
-            crossCheckAttempt.setSession(savedSession);
-            crossCheckAttempt.setStatus(CrossCheckAttemptStatus.STARTED);
-            attemptRepository.save(crossCheckAttempt);
+        var roles = crossCheck.getRules().stream().map(CrossCheckRule::getEvaluatorRole).distinct().toList();
+        for (var role : roles) {
+            var users = userService.findUsersByRole(Role.valueOf(role));
+            for (var user : users) {
+                var crossCheckAttempt = new CrossCheckAttempt();
+                crossCheckAttempt.setEvaluator(user);
+                crossCheckAttempt.setSession(savedSession);
+                crossCheckAttempt.setStatus(CrossCheckAttemptStatus.STARTED);
+                attemptRepository.save(crossCheckAttempt);
+            }
         }
     }
 
@@ -56,36 +57,58 @@ public class CrossCheckService {
                         session.getId(),
                         session.getDate(),
                         session.getDescription(),
+                        session.getAttempts().stream()
+                                             .map(a->a.getStatus().toString())
+                                             .allMatch("COMPLETED"::equals)?"COMPLETED":"STARTED",
+                        new ArrayList<>()
+                        ))
+                .sorted(Comparator.comparing(CrossCheckSessionDto::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
+
+    public List<CrossCheckSessionDto> getUserSessions(User user) {
+        var attempts = attemptRepository.findByEvaluatorId(user.getId()).stream().sorted(Comparator.comparing(CrossCheckAttempt::getId).reversed());
+
+        return attempts
+                .map(a -> new CrossCheckSessionDto(
+                        a.getId(),
+                        a.getSession().getDate(),
+                        a.getSession().getDescription(),
+                        a.getStatus().toString(),
                         new ArrayList<>()
                 ))
                 .collect(Collectors.toList());
     }
 
-    public CrossCheckAttemptDto startAttempt(Integer attemptId) {
+    public void saveEvaluation(Integer attemptId, List<UserScore> userScores) {
         var attempt = attemptRepository.findById(attemptId).orElseThrow();
-        attempt.setStatus(CrossCheckAttemptStatus.STARTED);
-        var updatedAttempt = attemptRepository.save(attempt);
-        return new CrossCheckAttemptDto(updatedAttempt.getId(), updatedAttempt.getEvaluator().getId(), updatedAttempt.getStatus().toString());
-    }
 
-    public void saveEvaluation(Integer attemptId, Integer evaluatedId, Map<Integer, Integer> questionMarks, Map<Integer, String> comments) {
-        var attempt = attemptRepository.findById(attemptId).orElseThrow();
-        for (var entry : questionMarks.entrySet()) {
-            var evaluation = new CrossCheckEvaluation();
-            evaluation.setAttempt(attempt);
-            evaluation.setEvaluated(userService.findUserById(evaluatedId));
-            evaluation.setQuestion(questionRepository.findById(entry.getKey()).orElseThrow());
-            evaluation.setMark(entry.getValue());
-            evaluation.setComment(comments.get(entry.getKey()));
-            evaluationRepository.save(evaluation);
+        for (UserScore userScore : userScores) {
+            var evaluatedUser = userService.findUserById(userScore.getUserId());
+
+            for (ScoreEntry entry : userScore.getScores()) {
+                var evaluation = new CrossCheckEvaluation();
+                evaluation.setAttempt(attempt);
+                evaluation.setEvaluated(evaluatedUser);
+                evaluation.setQuestion(questionRepository.findById(entry.getQuestionId()).orElseThrow());
+                evaluation.setMark(entry.getScore());
+                evaluation.setComment(entry.getComment());
+                evaluationRepository.save(evaluation);
+            }
         }
+        attempt.setStatus(CrossCheckAttemptStatus.COMPLETED);
+        attemptRepository.save(attempt);
     }
 
     public CrossCheckAttemptDetailsDto getAttemptDetails(Integer attemptId) {
         var attempt = attemptRepository.findById(attemptId).orElseThrow();
-        var users = userService.findUsersByRole(Role.EMPLOYEE);
-        var questions = questionRepository.findByCrossCheckId(attempt.getSession().getCrossCheck().getId());
-        return null;//new CrossCheckAttemptDetailsDto(attempt.getId(), users, questions);
+        var users = userService.findUsersByRole(Role.EMPLOYEE).stream()
+                .filter(u -> !Objects.equals(attempt.getEvaluator().getId(), u.getId()))
+                .map(user -> new UserDto(user.getId(), user.getFirstname(), user.getLastname(), user.getRole().toString()))
+                .toList();
+        var questions = questionRepository.findByCrossCheckId(attempt.getSession().getCrossCheck().getId()).stream().map(question -> new QuestionDto(question.getId(), question.getQuestion())).toList();
+        return new CrossCheckAttemptDetailsDto(attempt.getId(), users, questions, attempt.getStatus().toString());
     }
 
     public CrossCheckAttemptResultDto getCompletedAttemptDetails(Integer attemptId) {
@@ -105,4 +128,68 @@ public class CrossCheckService {
 
         return new CrossCheckAttemptResultDto(attempt.getId(), attempt.getEvaluator().getId(), results);
     }
+    public List<EvaluatorDto> getSessionEvaluations(Integer sessionId) {
+        var session = sessionRepository.findById(sessionId).orElseThrow();
+        var attempts = session.getAttempts();
+
+        return attempts.stream().map(attempt -> {
+            var evaluatorDto = new UserDto(
+                    attempt.getEvaluator().getId(),
+                    attempt.getEvaluator().getFirstname(),
+                    attempt.getEvaluator().getLastname(),
+                    attempt.getEvaluator().getRole().toString()
+            );
+
+            var evaluations = evaluationRepository.findByAttemptId(attempt.getId());
+            var evaluationsDto = evaluations.stream()
+                    .collect(Collectors.groupingBy(CrossCheckEvaluation::getEvaluated))
+                    .entrySet().stream()
+                    .map(entry -> {
+                        var evaluatedUser = entry.getKey();
+                        var evaluatedDto = new UserDto(
+                                evaluatedUser.getId(),
+                                evaluatedUser.getFirstname(),
+                                evaluatedUser.getLastname(),
+                                evaluatedUser.getRole().toString()
+                        );
+
+                        var marks = entry.getValue().stream().map(evaluation -> new MarkDto(
+                                new QuestionDto(evaluation.getQuestion().getId(), evaluation.getQuestion().getQuestion()),
+                                evaluation.getMark()
+                        )).toList();
+
+                        return new EvaluationDto(evaluatedDto, marks);
+                    }).toList();
+
+            return new EvaluatorDto(evaluatorDto, evaluationsDto);
+        }).toList();
+    }
+
+    public List<EvaluationDto> getSessionEvaluationsAvg(Integer sessionId) {
+        var evaluations = evaluationRepository.findBySessionId(sessionId).stream()
+                .collect(Collectors.groupingBy(CrossCheckEvaluation::getEvaluated));
+        List<EvaluationDto> evaluationDtos = new ArrayList<>();
+        for(var e: evaluations.entrySet()){
+            var evaluatedDto = new UserDto(
+                    e.getKey().getId(),
+                    e.getKey().getFirstname(),
+                    e.getKey().getLastname(),
+                    e.getKey().getRole().toString()
+            );
+            List<MarkDto> marks = new ArrayList<>();
+            var questionMap = e.getValue().stream()
+                    .collect(Collectors.groupingBy(CrossCheckEvaluation::getQuestion));
+            for(var q: questionMap.entrySet()){
+                var questionDto = new QuestionDto(q.getKey().getId(), q.getKey().getQuestion());
+                var avgM = q.getValue().stream().mapToInt(qmarks->qmarks.getMark()).average().getAsDouble();
+                marks.add(new MarkDto(questionDto, avgM));
+            }
+
+            evaluationDtos.add(new EvaluationDto(evaluatedDto, marks));
+        }
+        return evaluationDtos;
+
+
+    }
+
 }

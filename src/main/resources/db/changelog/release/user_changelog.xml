@@ -40,4 +40,16 @@
                 add column statistic_id int;
         </sql>
     </changeSet>
+
+    <changeSet id="5" author="gafarov">
+        <sql>
+            CREATE TABLE password_reset
+            (
+                id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                user_id    int REFERENCES users (id) ON DELETE CASCADE,
+                is_used    boolean,
+                expires_at TIMESTAMP           NOT NULL
+            );
+        </sql>
+    </changeSet>
 </databaseChangeLog>

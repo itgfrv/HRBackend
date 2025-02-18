@@ -14,5 +14,6 @@ public class CrossCheckSessionDto {
     private Integer id;
     private LocalDateTime date;
     private String description;
+    private String status;
     private List<CrossCheckAttemptDto> attempts;
 }
