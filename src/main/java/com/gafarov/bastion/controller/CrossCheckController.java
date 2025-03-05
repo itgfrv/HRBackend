@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/cross-check")
 @RequiredArgsConstructor
-public class CrossCheckController {
+public class CrossCheckController extends BaseController {
     private final CrossCheckService crossCheckService;
 
     @PostMapping("/session/{crossCheckId}")
@@ -34,8 +34,10 @@ public class CrossCheckController {
     }
 
     @GetMapping("/sessions/details/{sessionId}/avg")
-    public List<EvaluationDto> getSessionDetailsAvg(@PathVariable Integer sessionId) {
-        return crossCheckService.getSessionEvaluationsAvg(sessionId);
+    public List<EvaluationDto> getSessionDetailsAvg(
+            @PathVariable Integer sessionId,
+            @RequestParam(required = false, defaultValue = "2") Integer weight) {
+        return crossCheckService.getSessionEvaluationsAvg(sessionId, weight);
     }
 
     @GetMapping("/attempt/result/{attemptId}")

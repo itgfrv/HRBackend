@@ -165,11 +165,12 @@ public class CrossCheckService {
         }).toList();
     }
 
-    public List<EvaluationDto> getSessionEvaluationsAvg(Integer sessionId) {
+    public List<EvaluationDto> getSessionEvaluationsAvg(Integer sessionId, Integer weight) {
         var evaluations = evaluationRepository.findBySessionId(sessionId).stream()
                 .collect(Collectors.groupingBy(CrossCheckEvaluation::getEvaluated));
         List<EvaluationDto> evaluationDtos = new ArrayList<>();
         for(var e: evaluations.entrySet()){
+
             var evaluatedDto = new UserDto(
                     e.getKey().getId(),
                     e.getKey().getFirstname(),
@@ -181,8 +182,20 @@ public class CrossCheckService {
                     .collect(Collectors.groupingBy(CrossCheckEvaluation::getQuestion));
             for(var q: questionMap.entrySet()){
                 var questionDto = new QuestionDto(q.getKey().getId(), q.getKey().getQuestion());
-                var avgM = q.getValue().stream().mapToInt(qmarks->qmarks.getMark()).average().getAsDouble();
-                marks.add(new MarkDto(questionDto, avgM));
+                int[] number = {0};
+                var avgSum = q.getValue().stream().mapToInt(qmarks->{
+                    if(qmarks.getAttempt().getEvaluator().getRole()==Role.ADMIN){
+                        number[0] += 2;
+                        return qmarks.getMark()*weight;
+                    } else {
+                        number[0] += 1;
+                        return qmarks.getMark();
+                    }
+                }).sum();
+                double result = (double) avgSum / number[0];
+                double rounded = Math.round(result * 100.0) / 100.0;
+
+                marks.add(new MarkDto(questionDto, rounded));
             }
 
             evaluationDtos.add(new EvaluationDto(evaluatedDto, marks));

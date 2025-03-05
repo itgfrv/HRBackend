@@ -16,5 +16,4 @@ public interface CrossCheckEvaluationRepository extends JpaRepository<CrossCheck
         WHERE a.session.id = :sessionId
     """)
     List<CrossCheckEvaluation> findBySessionId(@Param("sessionId") Integer sessionId);
-
 }

@@ -4,5 +4,6 @@ public enum Role {
     USER,
     ADMIN,
     EMPLOYEE,
-    REJECT
+    REJECT,
+    FIRED
 }
