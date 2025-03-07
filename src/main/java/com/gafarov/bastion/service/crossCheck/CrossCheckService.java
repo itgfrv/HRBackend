@@ -4,8 +4,11 @@ import com.gafarov.bastion.entity.crossCheck.*;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.model.crossCheck.*;
+import com.gafarov.bastion.repository.UserRepository;
 import com.gafarov.bastion.repository.crossCheck.*;
+import com.gafarov.bastion.service.EmailService;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,7 @@ public class CrossCheckService {
     private final CrossCheckEvaluationRepository evaluationRepository;
     private final CrossCheckQuestionRepository questionRepository;
     private final UserServiceImpl userService;
+    private final EmailService emailService;
 
     public void addCrossCheckSession(Integer crossCheckId, String description) {
         var crossCheck = crossCheckRepository.findById(crossCheckId).orElseThrow();
@@ -81,7 +85,7 @@ public class CrossCheckService {
                 .collect(Collectors.toList());
     }
 
-    public void saveEvaluation(Integer attemptId, List<UserScore> userScores) {
+    public void saveEvaluation(Integer attemptId, List<UserScore> userScores) throws MessagingException {
         var attempt = attemptRepository.findById(attemptId).orElseThrow();
 
         for (UserScore userScore : userScores) {
@@ -99,6 +103,12 @@ public class CrossCheckService {
         }
         attempt.setStatus(CrossCheckAttemptStatus.COMPLETED);
         attemptRepository.save(attempt);
+        var session = attempt.getSession();
+        if(session.getAttempts().stream()
+                  .map(a->a.getStatus().toString())
+                  .allMatch("COMPLETED"::equals)){
+            emailService.sendChangeCrossCheckCompleteNotification(session.getDescription());
+        }
     }
 
     public CrossCheckAttemptDetailsDto getAttemptDetails(Integer attemptId) {
@@ -165,7 +175,7 @@ public class CrossCheckService {
         }).toList();
     }
 
-    public List<EvaluationDto> getSessionEvaluationsAvg(Integer sessionId, Integer weight) {
+    public List<EvaluationDto> getSessionEvaluationsAvg(Integer sessionId, double weight) {
         var evaluations = evaluationRepository.findBySessionId(sessionId).stream()
                 .collect(Collectors.groupingBy(CrossCheckEvaluation::getEvaluated));
         List<EvaluationDto> evaluationDtos = new ArrayList<>();
@@ -183,7 +193,7 @@ public class CrossCheckService {
             for(var q: questionMap.entrySet()){
                 var questionDto = new QuestionDto(q.getKey().getId(), q.getKey().getQuestion());
                 int[] number = {0};
-                var avgSum = q.getValue().stream().mapToInt(qmarks->{
+                var avgSum = q.getValue().stream().mapToDouble(qmarks->{
                     if(qmarks.getAttempt().getEvaluator().getRole()==Role.ADMIN){
                         number[0] += 2;
                         return qmarks.getMark()*weight;

@@ -1,16 +1,15 @@
 package com.gafarov.bastion.controller;
 
-import com.gafarov.bastion.entity.crossCheck.CrossCheckEvaluation;
 import com.gafarov.bastion.entity.user.User;
 import com.gafarov.bastion.model.crossCheck.*;
 import com.gafarov.bastion.service.crossCheck.CrossCheckService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cross-check")
@@ -36,7 +35,7 @@ public class CrossCheckController extends BaseController {
     @GetMapping("/sessions/details/{sessionId}/avg")
     public List<EvaluationDto> getSessionDetailsAvg(
             @PathVariable Integer sessionId,
-            @RequestParam(required = false, defaultValue = "2") Integer weight) {
+            @RequestParam(required = false, defaultValue = "1") double weight) {
         return crossCheckService.getSessionEvaluationsAvg(sessionId, weight);
     }
 
@@ -56,7 +55,7 @@ public class CrossCheckController extends BaseController {
     }
 
     @PostMapping("/attempts/evaluate")
-    public ResponseEntity<Void> saveEvaluation(@RequestParam Integer attemptId, @RequestBody List<UserScore> userScores) {
+    public ResponseEntity<Void> saveEvaluation(@RequestParam Integer attemptId, @RequestBody List<UserScore> userScores) throws MessagingException {
         crossCheckService.saveEvaluation(attemptId, userScores);
         return ResponseEntity.ok().build();
     }

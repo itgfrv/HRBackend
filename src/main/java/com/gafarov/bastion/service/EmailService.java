@@ -54,4 +54,9 @@ public class EmailService {
         sendHtmlEmail(userEmail, "Сброс пароля", "password-reset", variables);
     }
 
+    public void sendChangeCrossCheckCompleteNotification(String crossCheckName) throws MessagingException {
+        Map<String, Object> variables = Map.of("crossCheckName", crossCheckName);
+        sendHtmlEmail(config.getHrMail(), "Перекрестная оценка", "crossCheck-notification", variables);
+    }
+
 }
