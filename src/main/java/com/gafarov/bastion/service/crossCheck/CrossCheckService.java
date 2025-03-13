@@ -134,7 +134,6 @@ public class CrossCheckService {
                         evaluation.getMark(),
                         evaluation.getComment()
                 ))
-                .sorted(Comparator.comparing(EvaluationResultDto::getQuestionId))
                 .collect(Collectors.toList());
 
         return new CrossCheckAttemptResultDto(attempt.getId(), attempt.getEvaluator().getId(), results);
@@ -167,7 +166,7 @@ public class CrossCheckService {
                         var marks = entry.getValue().stream().map(evaluation -> new MarkDto(
                                 new QuestionDto(evaluation.getQuestion().getId(), evaluation.getQuestion().getQuestion()),
                                 evaluation.getMark()
-                        )).toList();
+                        )).sorted(Comparator.comparingInt(markDto -> markDto.getQuestion().getId())).toList();
 
                         return new EvaluationDto(evaluatedDto, marks);
                     }).toList();
