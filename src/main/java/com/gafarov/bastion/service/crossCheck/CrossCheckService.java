@@ -195,6 +195,9 @@ public class CrossCheckService {
                 var questionDto = new QuestionDto(q.getKey().getId(), q.getKey().getQuestion());
                 double[] number = {0};
                 var avgSum = q.getValue().stream().mapToDouble(qmarks->{
+                    if(qmarks.getMark() == 0){
+                        return 0;
+                    }
                     if(qmarks.getAttempt().getEvaluator().getRole()==Role.ADMIN){
                         number[0] += 1*weight;
                         return qmarks.getMark()*weight;
