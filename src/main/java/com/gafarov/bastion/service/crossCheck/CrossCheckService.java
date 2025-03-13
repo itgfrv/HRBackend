@@ -134,6 +134,7 @@ public class CrossCheckService {
                         evaluation.getMark(),
                         evaluation.getComment()
                 ))
+                .sorted(Comparator.comparing(EvaluationResultDto::getQuestionId))
                 .collect(Collectors.toList());
 
         return new CrossCheckAttemptResultDto(attempt.getId(), attempt.getEvaluator().getId(), results);
@@ -192,10 +193,10 @@ public class CrossCheckService {
                     .collect(Collectors.groupingBy(CrossCheckEvaluation::getQuestion));
             for(var q: questionMap.entrySet()){
                 var questionDto = new QuestionDto(q.getKey().getId(), q.getKey().getQuestion());
-                int[] number = {0};
+                double[] number = {0};
                 var avgSum = q.getValue().stream().mapToDouble(qmarks->{
                     if(qmarks.getAttempt().getEvaluator().getRole()==Role.ADMIN){
-                        number[0] += 2;
+                        number[0] += 1*weight;
                         return qmarks.getMark()*weight;
                     } else {
                         number[0] += 1;
@@ -207,7 +208,7 @@ public class CrossCheckService {
 
                 marks.add(new MarkDto(questionDto, rounded));
             }
-
+            marks.sort(Comparator.comparing(m -> m.getQuestion().getId()));
             evaluationDtos.add(new EvaluationDto(evaluatedDto, marks));
         }
         return evaluationDtos;
