@@ -59,4 +59,9 @@ public class EmailService {
         sendHtmlEmail(config.getHrMail(), "Перекрестная оценка", "crossCheck-notification", variables);
     }
 
+    public void sendCaseStudyDoneNotification(String applicantName) throws MessagingException {
+        Map<String, Object> variables = Map.of("applicantName", applicantName);
+        sendHtmlEmail(config.getHrMail(), "Чертежное задание", "case-study-done", variables);
+    }
+
 }

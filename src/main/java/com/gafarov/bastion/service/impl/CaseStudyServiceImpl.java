@@ -13,6 +13,8 @@ import com.gafarov.bastion.repository.casestudy.CaseStudyMarkRepository;
 import com.gafarov.bastion.repository.casestudy.CriteriaRepository;
 import com.gafarov.bastion.repository.casestudy.FileRepository;
 import com.gafarov.bastion.service.CaseStudyService;
+import com.gafarov.bastion.service.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,9 +32,10 @@ public class CaseStudyServiceImpl implements CaseStudyService {
     private final CaseStudyAttemptRepository caseStudyAttemptRepository;
     private final CaseStudyMarkRepository caseStudyMarkRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Override
-    public void uploadFiles(MultipartFile[] files, User user, Integer attemptId) {
+    public void uploadFiles(MultipartFile[] files, User user, Integer attemptId) throws MessagingException {
         CaseStudyAttempt attempt = caseStudyAttemptRepository.findByIdAndUserId(attemptId, user.getId()).orElseThrow();
         if (attempt.getStatus() == AttemptStatus.NOT_DONE) {
             for (MultipartFile file : files) {
@@ -48,6 +51,7 @@ public class CaseStudyServiceImpl implements CaseStudyService {
             caseStudyAttemptRepository.save(attempt);
             user.setViewed(false);
             userRepository.save(user);
+            emailService.sendCaseStudyDoneNotification(String.format("%s %s", user.getFirstname(), user.getLastname()));
         }
     }
 

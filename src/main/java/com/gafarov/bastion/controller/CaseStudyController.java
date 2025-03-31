@@ -12,6 +12,7 @@ import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptDTO;
 import com.gafarov.bastion.model.newcasestudy.CaseStudyAttemptMapper;
 import com.gafarov.bastion.service.impl.CaseStudyServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +37,7 @@ public class CaseStudyController {
             @AuthenticationPrincipal User user,
             @RequestParam("file") MultipartFile[] files,
             @PathVariable Integer attemptId
-    ) {
+    ) throws MessagingException {
         if (user.getActivity() != Activity.CASE_STUDY) {
             throw new ForbiddenException("forbidden");
         }
