@@ -2,6 +2,7 @@ package com.gafarov.bastion.service.statistic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gafarov.bastion.entity.user.Role;
 import com.gafarov.bastion.service.impl.UserServiceImpl;
@@ -17,10 +18,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StatisticService {
@@ -47,13 +45,17 @@ public class StatisticService {
                 .build();
     }
 
-    private HttpRequest getRequest(String endpoint, String userId, String endDate, String startDate) {
-        Map<String, String> formData = Map.of(
+    private HttpRequest getRequest(String endpoint, String userId, String endDate, String startDate, Map<String, String> additionalParams) {
+        Map<String, String> formData = new HashMap<>(Map.of(
                 "login", login,
                 "password", requestPassword,
                 "user_id", userId,
                 "period", String.format("%s;%s", endDate, startDate)
-        );
+        ));
+
+        if (additionalParams != null) {
+            formData.putAll(additionalParams);
+        }
         String formBody = formData.entrySet().stream()
                 .map(entry -> URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
                         URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
@@ -69,11 +71,16 @@ public class StatisticService {
 
     public StatisticDataResponse getForEndpoint(String endpoint, String userId, LocalDate startDate, LocalDate endDate) {
         var statisticId = userService.findUserById(Integer.valueOf(userId)).getStatisticId();
-        HttpRequest request = getRequest(endpoint, String.valueOf(statisticId), startDate.format(formatter), endDate.format(formatter));
+        HttpRequest request = getRequest(endpoint, String.valueOf(statisticId), startDate.format(formatter), endDate.format(formatter), null);
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                var statisticData  = parseResponse(response.body());
+                List<StatisticData> statisticData;
+                if (endpoint.equals("getUserDailyRating")){
+                    statisticData = parseResponse(response.body(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                } else{
+                    statisticData  = parseResponse(response.body(), formatter);
+                }
                 double avg = 0d;
                 try{
                     avg  = calculateAvg(endpoint, startDate, endDate);
@@ -88,7 +95,7 @@ public class StatisticService {
         }
     }
 
-    private List<StatisticData> parseResponse(String response) throws JsonProcessingException {
+    private List<StatisticData> parseResponse(String response, DateTimeFormatter formatter) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Response apiResponse = objectMapper.readValue(response, Response.class);
 
@@ -130,40 +137,149 @@ public class StatisticService {
         var employees = userService.findUsersByRole(Role.EMPLOYEE);
         var allEmployeeStatistic = new ArrayList<StatisticData>();
         for(var e: employees) {
-            HttpRequest request = getRequest(endpoint, String.valueOf(e.getStatisticId()), startDate.format(formatter), endDate.format(formatter));
+            HttpRequest request = getRequest(endpoint, String.valueOf(e.getStatisticId()), startDate.format(formatter), endDate.format(formatter), null);
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            allEmployeeStatistic.addAll(parseResponse(response.body()));
+            allEmployeeStatistic.addAll(parseResponse(response.body(), formatter));
         }
         return allEmployeeStatistic.stream().mapToDouble(StatisticData::getCount).average().orElseThrow();
     }
-    //    public String getUserOrdersInWorkHours(String userId, LocalDate startDate, LocalDate endDate) {
-//        HttpRequest request = getRequest("getUserOrdersInWorkHours", userId, startDate.format(formatter), endDate.format(formatter));
-//        try {
-//            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//            if (response.statusCode() == 200) {
-//                ObjectMapper objectMapper = new ObjectMapper();
-//                Response apiResponse = objectMapper.readValue(response.body(), Response.class);
-//
-//                if ("success".equals(apiResponse.getStatus())) {
-//                    Map<String, Integer> resultMap = objectMapper.convertValue(apiResponse.getResult(), new TypeReference<Map<String, Integer>>() {
-//                    });
-//                    List<StatisticData> records = new ArrayList<>();
-//
-//                    for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
-//                        LocalDate date = LocalDate.parse(entry.getKey(), formatter);
-//                        int count = entry.getValue();
-//                        records.add(new StatisticData(date, count));
-//                    }
-//                    return new StatisticDataResponse("success", records);
-//                } else {
-//                    String error = objectMapper.convertValue(apiResponse.getResult(), String.class);
-//                    return new StatisticDataResponse(error, new ArrayList<>());
-//                }
-//            } else {
-//                return new StatisticDataResponse("error", new ArrayList<>());
-//            }
-//        } catch (IOException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+
+    public List<SalaryInfo> getUserSalaryInfo(String userId, LocalDate startDate, LocalDate endDate) {
+        var statisticId = userService.findUserById(Integer.valueOf(userId)).getStatisticId();
+        HttpRequest request = getRequest("getUserSalaryInfo", String.valueOf(statisticId), startDate.format(formatter), endDate.format(formatter), null);
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return parseSalaryResponse(response.body());
+            } else {
+                return Collections.emptyList();
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<SalaryInfo> parseSalaryResponse(String responseBody) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(responseBody);
+        if (!rootNode.has("status") || !rootNode.get("status").asText().equals("success")) {
+            return Collections.emptyList();
+        }
+        JsonNode resultNode = rootNode.get("result");
+        TypeReference<Map<String, Map<String, Map<String, Double>>>> typeRef = new TypeReference<>() {};
+        Map<String, Map<String, Map<String, Double>>> resultMap = objectMapper.convertValue(resultNode, typeRef);
+
+        List<SalaryInfo> salaryInfos = new ArrayList<>();
+        for (String monthKey : resultMap.keySet()) {
+            Map<String, Map<String, Double>> monthData = resultMap.get(monthKey);
+            Map<String, Double> monthly = monthData.get("monthly");
+            Map<String, Double> hourly = monthData.get("hourly");
+
+            LocalDate firstDay = LocalDate.parse(monthKey + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Double monthlySalary = monthly.get("salary");
+            Double monthlyFines = monthly.get("fines");
+            Double hourlySalary = hourly.get("salary");
+            Double hourlyFines = hourly.get("fines");
+
+            salaryInfos.add(new SalaryInfo(
+                    firstDay,
+                    hourlySalary,
+                    monthlySalary,
+                    hourlyFines,
+                    monthlyFines
+            ));
+        }
+        return salaryInfos;
+    }
+
+
+    public List<WorkInfo> getUserOrdersInWorkHours(String userId, LocalDate startDate, LocalDate endDate) {
+        var statisticId = userService.findUserById(Integer.valueOf(userId)).getStatisticId();
+        HttpRequest request = getRequest("getUserOrdersInWorkHours",
+                String.valueOf(statisticId),
+                startDate.format(formatter),
+                endDate.format(formatter),
+                null);
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200
+                    ? parseWorkResponse(response.body())
+                    : Collections.emptyList();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Failed to fetch orders data", e);
+        }
+    }
+
+    private List<WorkInfo> parseWorkResponse(String responseBody) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(responseBody);
+
+        if (!rootNode.has("status") || !rootNode.get("status").asText().equals("success")) {
+            return Collections.emptyList();
+        }
+
+        JsonNode resultNode = rootNode.get("result");
+        List<WorkInfo> result = new ArrayList<>();
+
+        Iterator<Map.Entry<String, JsonNode>> dates = resultNode.fields();
+        while (dates.hasNext()) {
+            Map.Entry<String, JsonNode> entry = dates.next();
+            String dateStr = entry.getKey();
+            JsonNode dayData = entry.getValue();
+
+            if (dayData.has("orders_p")) {
+                LocalDate date = LocalDate.parse(dateStr, formatter);
+                Double ordersP = dayData.get("orders_p").asDouble();
+                result.add(new WorkInfo(date, ordersP));
+            }
+        }
+
+        return result;
+    }
+
+    public List<WorkHoursInfo> getUserWorkHours(String userId, LocalDate startDate, LocalDate endDate) {
+        return getUserWorkHours(userId,startDate,endDate,null);
+    }
+
+    public List<WorkHoursInfo> getUserWorkHours(String userId, LocalDate startDate, LocalDate endDate, Map<String, String> additionalParams) {
+        var statisticId = userService.findUserById(Integer.valueOf(userId)).getStatisticId();
+        HttpRequest request = getRequest("getUserWorkHours",
+                String.valueOf(statisticId),
+                startDate.format(formatter),
+                endDate.format(formatter),
+                additionalParams);
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200
+                    ? parseWorkHoursResponse(response.body())
+                    : Collections.emptyList();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Failed to fetch work hours", e);
+        }
+    }
+
+    private List<WorkHoursInfo> parseWorkHoursResponse(String responseBody) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(responseBody);
+
+        if (!rootNode.has("status") || !rootNode.get("status").asText().equals("success")) {
+            return Collections.emptyList();
+        }
+
+        JsonNode resultNode = rootNode.get("result");
+        List<WorkHoursInfo> result = new ArrayList<>();
+
+        resultNode.fields().forEachRemaining(entry -> {
+            String dateStr = entry.getKey();
+            JsonNode dayData = entry.getValue();
+
+            LocalDate date = LocalDate.parse(dateStr, formatter);
+            Double hours = dayData.get("hours").asDouble();
+            Double breaksP = dayData.get("breaks_p").asDouble();
+
+            result.add(new WorkHoursInfo(date, hours, breaksP));
+        });
+
+        return result;
+    }
 }
