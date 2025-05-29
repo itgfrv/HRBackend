@@ -30,18 +30,18 @@ public class CaseStudyController {
     private final CaseStudyServiceImpl service;
 
     @PostMapping(value = "/load/{attemptId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(
-            summary = "Отправка файлов тестового задания"
-    )
+    @Operation(summary = "Отправка файлов тестового задания")
     public void loadFiles(
             @AuthenticationPrincipal User user,
             @RequestParam("file") MultipartFile[] files,
-            @PathVariable Integer attemptId
+            @PathVariable Integer attemptId,
+            @RequestParam("link1") String link1,      // Новый параметр 1
+            @RequestParam("link2") String link2       // Новый параметр 2
     ) throws MessagingException {
         if (user.getActivity() != Activity.CASE_STUDY) {
             throw new ForbiddenException("forbidden");
         }
-        service.uploadFiles(files, user, attemptId);
+        service.uploadFiles(files, user, attemptId, link1, link2);
     }
 
     @GetMapping(value = "/attempts")

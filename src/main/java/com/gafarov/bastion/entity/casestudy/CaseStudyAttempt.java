@@ -20,6 +20,10 @@ public class CaseStudyAttempt {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
+    @Column(name = "link1")
+    private String link1;
+    @Column(name = "link2")
+    private String link2;
 
     @OneToMany(mappedBy = "caseStudyAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files;

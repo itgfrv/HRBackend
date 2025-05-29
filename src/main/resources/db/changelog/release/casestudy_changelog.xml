@@ -45,4 +45,10 @@
             <column name="comment" type="varchar(500)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="4" author="gafarov">
+        <addColumn tableName="case_study_attempt">
+            <column name="link1" type="varchar(500)"/>
+            <column name="link2" type="varchar(500)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

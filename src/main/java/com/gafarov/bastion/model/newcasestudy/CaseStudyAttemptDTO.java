@@ -10,6 +10,8 @@ public class CaseStudyAttemptDTO {
     private Integer id;
     private Integer userId;
     private AttemptStatus status;
+    private String link1;
+    private String link2;
     private List<FileDTO> files;
     private List<CaseStudyMarkDTO> marks;
 }

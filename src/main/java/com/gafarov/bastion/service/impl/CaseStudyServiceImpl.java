@@ -12,7 +12,6 @@ import com.gafarov.bastion.repository.casestudy.CaseStudyAttemptRepository;
 import com.gafarov.bastion.repository.casestudy.CaseStudyMarkRepository;
 import com.gafarov.bastion.repository.casestudy.CriteriaRepository;
 import com.gafarov.bastion.repository.casestudy.FileRepository;
-import com.gafarov.bastion.service.CaseStudyService;
 import com.gafarov.bastion.service.EmailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CaseStudyServiceImpl implements CaseStudyService {
+public class CaseStudyServiceImpl {
     private final FileService fileService;
     private final FileRepository fileRepository;
     private final CriteriaRepository criteriaRepository;
@@ -34,8 +33,7 @@ public class CaseStudyServiceImpl implements CaseStudyService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
-    @Override
-    public void uploadFiles(MultipartFile[] files, User user, Integer attemptId) throws MessagingException {
+    public void uploadFiles(MultipartFile[] files, User user, Integer attemptId, String link1, String link2) throws MessagingException {
         CaseStudyAttempt attempt = caseStudyAttemptRepository.findByIdAndUserId(attemptId, user.getId()).orElseThrow();
         if (attempt.getStatus() == AttemptStatus.NOT_DONE) {
             for (MultipartFile file : files) {
@@ -47,6 +45,8 @@ public class CaseStudyServiceImpl implements CaseStudyService {
                 fileService.uploadFile(file, fileName);
                 fileRepository.save(fileEntity);
             }
+            attempt.setLink1(link1);
+            attempt.setLink2(link2);
             attempt.setStatus(AttemptStatus.SEND);
             caseStudyAttemptRepository.save(attempt);
             user.setViewed(false);
@@ -55,7 +55,6 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         }
     }
 
-    @Override
     public Integer addAttemptsToUser(Integer userId) {
         User user = userRepository.findById(userId).orElseThrow();
         user.setActivity(Activity.CASE_STUDY);
@@ -67,7 +66,7 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         return a.getId();
     }
 
-    @Override
+
     public List<CaseStudyAttemptDto> getUserAttempts(Integer userId) {
         return new ArrayList<>(
                 caseStudyAttemptRepository.findAllByUserId(userId)

@@ -15,6 +15,8 @@ public class CaseStudyAttemptMapper {
         dto.setId(attempt.getId());
         dto.setUserId(attempt.getUserId());
         dto.setStatus(attempt.getStatus());
+        dto.setLink1(attempt.getLink1());
+        dto.setLink2(attempt.getLink2());
 
         // Преобразуем список файлов в DTO
         List<FileDTO> fileDTOs = attempt.getFiles().stream()
