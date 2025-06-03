@@ -51,4 +51,11 @@
             <column name="link2" type="varchar(500)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="6" author="gafarov">
+        <loadUpdateData
+                tableName="criteria"
+                primaryKey="id"
+                file="db/changelog/data/criteria2.csv"
+                separator=";"/>
+    </changeSet>
 </databaseChangeLog>
